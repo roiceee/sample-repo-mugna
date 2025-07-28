@@ -1,18 +1,37 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { 
-  Users, 
-  Building2, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Search, 
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import {
+  Users,
+  Building2,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Search,
   Filter,
   Eye,
   UserCheck,
@@ -20,16 +39,23 @@ import {
   Calendar,
   MapPin,
   Phone,
-  Mail
-} from 'lucide-react';
-import { User, NavigationPage } from '../App';
+  Mail,
+} from "lucide-react";
+import { User, NavigationPage } from "../src/App";
 
 interface ClubsPageProps {
   user: User | null;
-  onNavigate: (page: NavigationPage, memberId?: string, sponsorId?: string, tab?: string, eventId?: string, clubId?: string) => void;
+  onNavigate: (
+    page: NavigationPage,
+    memberId?: string,
+    sponsorId?: string,
+    tab?: string,
+    eventId?: string,
+    clubId?: string
+  ) => void;
 }
 
-type ClubStatus = 'Pending' | 'Active' | 'Expired' | 'Declined';
+type ClubStatus = "Pending" | "Active" | "Expired" | "Declined";
 
 interface Club {
   id: string;
@@ -50,87 +76,89 @@ interface Club {
 }
 
 export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<ClubStatus | 'All'>('All');
-  const [activeTab, setActiveTab] = useState<ClubStatus | 'All'>('All');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<ClubStatus | "All">("All");
+  const [activeTab, setActiveTab] = useState<ClubStatus | "All">("All");
 
   // Mock club data
   const clubs: Club[] = [
     {
-      id: '1',
-      name: 'Davao Eagles FC',
-      category: 'Professional',
+      id: "1",
+      name: "Davao Eagles FC",
+      category: "Professional",
       foundedYear: 2020,
-      address: 'Davao City Sports Complex, Davao City',
+      address: "Davao City Sports Complex, Davao City",
       playerCount: 25,
-      ownerName: 'Juan Dela Cruz',
-      ownerEmail: 'juan@davaoeagles.com',
-      ownerPhone: '+63 912 345 6789',
-      ownerAddress: 'Poblacion District, Davao City',
-      status: 'Active',
-      registrationDate: '2024-01-15',
-      approvalDate: '2024-01-20',
-      expiryDate: '2025-01-20'
+      ownerName: "Juan Dela Cruz",
+      ownerEmail: "juan@davaoeagles.com",
+      ownerPhone: "+63 912 345 6789",
+      ownerAddress: "Poblacion District, Davao City",
+      status: "Active",
+      registrationDate: "2024-01-15",
+      approvalDate: "2024-01-20",
+      expiryDate: "2025-01-20",
     },
     {
-      id: '2',
-      name: 'Mindanao Warriors',
-      category: 'Semi-Professional',
+      id: "2",
+      name: "Mindanao Warriors",
+      category: "Semi-Professional",
       foundedYear: 2019,
-      address: 'General Santos City Stadium',
+      address: "General Santos City Stadium",
       playerCount: 22,
-      ownerName: 'Maria Santos',
-      ownerEmail: 'maria@mindanaowarriors.com',
-      ownerPhone: '+63 917 234 5678',
-      ownerAddress: 'City Heights, General Santos',
-      status: 'Pending',
-      registrationDate: '2024-12-10'
+      ownerName: "Maria Santos",
+      ownerEmail: "maria@mindanaowarriors.com",
+      ownerPhone: "+63 917 234 5678",
+      ownerAddress: "City Heights, General Santos",
+      status: "Pending",
+      registrationDate: "2024-12-10",
     },
     {
-      id: '3',
-      name: 'Southern Strikers',
-      category: 'Amateur',
+      id: "3",
+      name: "Southern Strikers",
+      category: "Amateur",
       foundedYear: 2018,
       playerCount: 18,
-      ownerName: 'Roberto Gonzales',
-      ownerEmail: 'rob@southernstrikers.com',
-      ownerPhone: '+63 920 123 4567',
-      ownerAddress: 'Buhangin, Davao City',
-      status: 'Expired',
-      registrationDate: '2023-02-01',
-      approvalDate: '2023-02-05',
-      expiryDate: '2024-02-05'
+      ownerName: "Roberto Gonzales",
+      ownerEmail: "rob@southernstrikers.com",
+      ownerPhone: "+63 920 123 4567",
+      ownerAddress: "Buhangin, Davao City",
+      status: "Expired",
+      registrationDate: "2023-02-01",
+      approvalDate: "2023-02-05",
+      expiryDate: "2024-02-05",
     },
     {
-      id: '4',
-      name: 'Coastal United',
-      category: 'Youth',
+      id: "4",
+      name: "Coastal United",
+      category: "Youth",
       foundedYear: 2021,
-      address: 'Samal Island Sports Center',
+      address: "Samal Island Sports Center",
       playerCount: 20,
-      ownerName: 'Ana Reyes',
-      ownerEmail: 'ana@coastalunited.com',
-      ownerPhone: '+63 918 765 4321',
-      ownerAddress: 'Samal Island, Davao del Norte',
-      status: 'Declined',
-      registrationDate: '2024-11-20'
-    }
+      ownerName: "Ana Reyes",
+      ownerEmail: "ana@coastalunited.com",
+      ownerPhone: "+63 918 765 4321",
+      ownerAddress: "Samal Island, Davao del Norte",
+      status: "Declined",
+      registrationDate: "2024-11-20",
+    },
   ];
 
   const clubStats = {
     total: clubs.length,
-    active: clubs.filter(club => club.status === 'Active').length,
-    pending: clubs.filter(club => club.status === 'Pending').length,
-    expired: clubs.filter(club => club.status === 'Expired').length,
-    declined: clubs.filter(club => club.status === 'Declined').length
+    active: clubs.filter((club) => club.status === "Active").length,
+    pending: clubs.filter((club) => club.status === "Pending").length,
+    expired: clubs.filter((club) => club.status === "Expired").length,
+    declined: clubs.filter((club) => club.status === "Declined").length,
   };
 
-  const filteredClubs = clubs.filter(club => {
-    const matchesSearch = club.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         club.ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         club.category.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || club.status === statusFilter;
-    const matchesTab = activeTab === 'All' || club.status === activeTab;
+  const filteredClubs = clubs.filter((club) => {
+    const matchesSearch =
+      club.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      club.ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      club.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus =
+      statusFilter === "All" || club.status === statusFilter;
+    const matchesTab = activeTab === "All" || club.status === activeTab;
     return matchesSearch && matchesStatus && matchesTab;
   });
 
@@ -141,15 +169,30 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
 
   const getStatusBadge = (status: ClubStatus) => {
     const statusConfig = {
-      'Active': { variant: 'default' as const, className: 'bg-green-100 text-green-800' },
-      'Pending': { variant: 'secondary' as const, className: 'bg-yellow-100 text-yellow-800' },
-      'Expired': { variant: 'outline' as const, className: 'bg-gray-100 text-gray-600' },
-      'Declined': { variant: 'destructive' as const, className: 'bg-red-100 text-red-800' }
+      Active: {
+        variant: "default" as const,
+        className: "bg-green-100 text-green-800",
+      },
+      Pending: {
+        variant: "secondary" as const,
+        className: "bg-yellow-100 text-yellow-800",
+      },
+      Expired: {
+        variant: "outline" as const,
+        className: "bg-gray-100 text-gray-600",
+      },
+      Declined: {
+        variant: "destructive" as const,
+        className: "bg-red-100 text-red-800",
+      },
     };
 
     const config = statusConfig[status];
     return (
-      <Badge variant={config.variant} className={`rounded-lg ${config.className}`}>
+      <Badge
+        variant={config.variant}
+        className={`rounded-lg ${config.className}`}
+      >
         {status}
       </Badge>
     );
@@ -161,7 +204,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Clubs Management</h1>
-          <p className="text-gray-600">Manage all registered clubs and their statuses</p>
+          <p className="text-gray-600">
+            Manage all registered clubs and their statuses
+          </p>
         </div>
       </div>
 
@@ -172,7 +217,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Clubs</p>
-                <p className="text-2xl font-bold text-gray-900">{clubStats.total}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {clubStats.total}
+                </p>
               </div>
               <div className="p-3 rounded-full bg-gray-100">
                 <Building2 className="w-6 h-6 text-blue-600" />
@@ -185,8 +232,12 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Clubs</p>
-                <p className="text-2xl font-bold text-gray-900">{clubStats.active}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Active Clubs
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {clubStats.active}
+                </p>
               </div>
               <div className="p-3 rounded-full bg-gray-100">
                 <CheckCircle className="w-6 h-6 text-green-600" />
@@ -199,8 +250,12 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Pending Approval</p>
-                <p className="text-2xl font-bold text-gray-900">{clubStats.pending}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Pending Approval
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {clubStats.pending}
+                </p>
               </div>
               <div className="p-3 rounded-full bg-gray-100">
                 <Clock className="w-6 h-6 text-yellow-600" />
@@ -214,7 +269,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Expired</p>
-                <p className="text-2xl font-bold text-gray-900">{clubStats.expired}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {clubStats.expired}
+                </p>
               </div>
               <div className="p-3 rounded-full bg-gray-100">
                 <XCircle className="w-6 h-6 text-gray-600" />
@@ -228,7 +285,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Declined</p>
-                <p className="text-2xl font-bold text-gray-900">{clubStats.declined}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {clubStats.declined}
+                </p>
               </div>
               <div className="p-3 rounded-full bg-gray-100">
                 <XCircle className="w-6 h-6 text-red-600" />
@@ -244,7 +303,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Registered Clubs</CardTitle>
-              <CardDescription>Manage all club registrations and their approval status</CardDescription>
+              <CardDescription>
+                Manage all club registrations and their approval status
+              </CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -263,7 +324,12 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
             </div>
             <div className="flex items-center space-x-2">
               <Filter className="w-4 h-4 text-gray-500" />
-              <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as ClubStatus | 'All')}>
+              <Select
+                value={statusFilter}
+                onValueChange={(value) =>
+                  setStatusFilter(value as ClubStatus | "All")
+                }
+              >
                 <SelectTrigger className="w-48 rounded-lg">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
@@ -282,19 +348,31 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
               {[
-                { key: 'All', label: 'All Clubs', count: clubStats.total },
-                { key: 'Pending', label: 'Pending Approval', count: clubStats.pending },
-                { key: 'Active', label: 'Active', count: clubStats.active },
-                { key: 'Expired', label: 'Membership Expired', count: clubStats.expired },
-                { key: 'Declined', label: 'Declined', count: clubStats.declined },
+                { key: "All", label: "All Clubs", count: clubStats.total },
+                {
+                  key: "Pending",
+                  label: "Pending Approval",
+                  count: clubStats.pending,
+                },
+                { key: "Active", label: "Active", count: clubStats.active },
+                {
+                  key: "Expired",
+                  label: "Membership Expired",
+                  count: clubStats.expired,
+                },
+                {
+                  key: "Declined",
+                  label: "Declined",
+                  count: clubStats.declined,
+                },
               ].map((tab) => (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key as ClubStatus | 'All')}
+                  onClick={() => setActiveTab(tab.key as ClubStatus | "All")}
                   className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.key
-                      ? 'border-logo-green text-logo-green'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? "border-logo-green text-logo-green"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
                 >
                   {tab.label} ({tab.count})
@@ -329,8 +407,12 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-900">{club.name}</p>
-                          <p className="text-sm text-gray-500">Founded {club.foundedYear}</p>
+                          <p className="font-medium text-gray-900">
+                            {club.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Founded {club.foundedYear}
+                          </p>
                         </div>
                       </div>
                     </TableCell>
@@ -341,8 +423,12 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
                     </TableCell>
                     <TableCell>
                       <div>
-                        <p className="font-medium text-gray-900">{club.ownerName}</p>
-                        <p className="text-sm text-gray-500">{club.ownerEmail}</p>
+                        <p className="font-medium text-gray-900">
+                          {club.ownerName}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {club.ownerEmail}
+                        </p>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -354,29 +440,40 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
                     <TableCell>
                       <div className="flex items-center space-x-1 text-gray-600">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(club.registrationDate).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(club.registrationDate).toLocaleDateString()}
+                        </span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      {getStatusBadge(club.status)}
-                    </TableCell>
+                    <TableCell>{getStatusBadge(club.status)}</TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => onNavigate('club-details', undefined, undefined, undefined, undefined, club.id)}
+                          onClick={() =>
+                            onNavigate(
+                              "club-details",
+                              undefined,
+                              undefined,
+                              undefined,
+                              undefined,
+                              club.id
+                            )
+                          }
                           className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg"
                         >
                           <Eye className="w-4 h-4 mr-1" />
                           View
                         </Button>
-                        {club.status === 'Pending' && (
+                        {club.status === "Pending" && (
                           <>
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleStatusChange(club.id, 'Active')}
+                              onClick={() =>
+                                handleStatusChange(club.id, "Active")
+                              }
                               className="text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg"
                             >
                               <UserCheck className="w-4 h-4 mr-1" />
@@ -385,7 +482,9 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleStatusChange(club.id, 'Declined')}
+                              onClick={() =>
+                                handleStatusChange(club.id, "Declined")
+                              }
                               className="text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
                             >
                               <UserX className="w-4 h-4 mr-1" />
@@ -404,13 +503,13 @@ export function ClubsPage({ user, onNavigate }: ClubsPageProps) {
           {filteredClubs.length === 0 && (
             <div className="text-center py-8">
               <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No clubs found matching your criteria.</p>
+              <p className="text-gray-500">
+                No clubs found matching your criteria.
+              </p>
             </div>
           )}
         </CardContent>
       </Card>
-
-
     </div>
   );
 }

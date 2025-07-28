@@ -1,41 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Header } from "./components/Header";
-import { LandingPage } from "./components/LandingPage";
-import { LoginPage } from "./components/LoginPage";
-import { RegisterPage } from "./components/RegisterPage";
-import { ClubRegistrationPage } from "./components/ClubRegistrationPage";
-import { Dashboard } from "./components/Dashboard";
-import { EventsPage } from "./components/EventsPage";
-import { EventManagementPage } from "./components/EventManagementPage";
-import { EventRegistrationPage } from "./components/EventRegistrationPage";
-import { EventDetailsPage } from "./components/EventDetailsPage";
-import { GalleryPage } from "./components/GalleryPage";
-import { ClubPage } from "./components/ClubPage";
-import { ClubsPage } from "./components/ClunsPage";
-import { ClubDetailsPage } from "./components/ClubDetailsPage";
-import { MemberProfilePage } from "./components/MemberProfilePage";
-import { RenewalPage } from "./components/RenewalPage";
-import { AdminManagementPage } from "./components/AdminManagementPage";
-import { ProfilePage } from "./components/ProfilePage";
-import { AccountingPage } from "./components/AccountingPage";
-import { SponsorsPage } from "./components/SponsorsPage";
-import { AddSponsorPage } from "./components/AddSponsorPage";
-import { EditSponsorPage } from "./components/EditSponsorPage";
-import { VersionHistoryPage } from "./components/VersionHistoryPage";
-import { Button } from "./components/ui/button";
+import { Header } from "../components/Header";
+import { LandingPage } from "../components/LandingPage";
+import { LoginPage } from "../components/LoginPage";
+import { RegisterPage } from "../components/RegisterPage";
+import { ClubRegistrationPage } from "../components/ClubRegistrationPage";
+import { Dashboard } from "../components/Dashboard";
+import { EventsPage } from "../components/EventsPage";
+import { EventManagementPage } from "../components/EventManagementPage";
+import { EventRegistrationPage } from "../components/EventRegistrationPage";
+import { EventDetailsPage } from "../components/EventDetailsPage";
+import { GalleryPage } from "../components/GalleryPage";
+import { ClubPage } from "../components/ClubPage";
+import { ClubsPage } from "../components/ClunsPage";
+import { ClubDetailsPage } from "../components/ClubDetailsPage";
+import { MemberProfilePage } from "../components/MemberProfilePage";
+import { RenewalPage } from "../components/RenewalPage";
+import { AdminManagementPage } from "../components/AdminManagementPage";
+import { ProfilePage } from "../components/ProfilePage";
+import { AccountingPage } from "../components/AccountingPage";
+import { SponsorsPage } from "../components/SponsorsPage";
+import { AddSponsorPage } from "../components/AddSponsorPage";
+import { EditSponsorPage } from "../components/EditSponsorPage";
+import { VersionHistoryPage } from "../components/VersionHistoryPage";
+import { Button } from "../components/ui/button";
 import { Info } from "lucide-react";
+import "../styles/globals.css";
 
 export type User = {
   id: string;
   name: string;
   email: string;
-  role:
-    | "Player"
-    | "Coach"
-    | "Referee"
-    | "Volunteer"
-    | "Admin"
-    | "Club Owner";
+  role: "Player" | "Coach" | "Referee" | "Volunteer" | "Admin" | "Club Owner";
   club: string;
   membershipStatus: "Active" | "Expired";
   membershipExpiry: string;
@@ -73,9 +68,7 @@ export type NavigationPage =
   | "version-history";
 
 // Helper function to check if user has admin privileges (both Admin and Club Owner)
-export const hasAdminPrivileges = (
-  user: User | null,
-): boolean => {
+export const hasAdminPrivileges = (user: User | null): boolean => {
   return user?.role === "Admin" || user?.role === "Club Owner";
 };
 
@@ -85,25 +78,16 @@ export const isFullAdmin = (user: User | null): boolean => {
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] =
-    useState<NavigationPage>("landing");
+  const [currentPage, setCurrentPage] = useState<NavigationPage>("landing");
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [selectedMemberId, setSelectedMemberId] = useState<
-    string | null
-  >(null);
-  const [selectedSponsorId, setSelectedSponsorId] = useState<
-    string | null
-  >(null);
-  const [selectedEventId, setSelectedEventId] = useState<
-    string | null
-  >(null);
-  const [selectedClubId, setSelectedClubId] = useState<
-    string | null
-  >(null);
-  const [defaultTab, setDefaultTab] = useState<string | null>(
-    null,
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
+  const [selectedSponsorId, setSelectedSponsorId] = useState<string | null>(
+    null
   );
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [selectedClubId, setSelectedClubId] = useState<string | null>(null);
+  const [defaultTab, setDefaultTab] = useState<string | null>(null);
 
   // Mock authentication check
   useEffect(() => {
@@ -119,10 +103,7 @@ export default function App() {
   const handleLogin = (userData: User) => {
     setUser(userData);
     setIsAuthenticated(true);
-    localStorage.setItem(
-      "footballUser",
-      JSON.stringify(userData),
-    );
+    localStorage.setItem("footballUser", JSON.stringify(userData));
     setCurrentPage("dashboard");
   };
 
@@ -139,7 +120,7 @@ export default function App() {
     sponsorId?: string,
     tab?: string,
     eventId?: string,
-    clubId?: string,
+    clubId?: string
   ) => {
     if (page === "member-profile" && memberId) {
       setSelectedMemberId(memberId);
@@ -172,31 +153,16 @@ export default function App() {
         return <LandingPage onNavigate={handleNavigation} />;
       case "login":
         return (
-          <LoginPage
-            onLogin={handleLogin}
-            onNavigate={handleNavigation}
-          />
+          <LoginPage onLogin={handleLogin} onNavigate={handleNavigation} />
         );
       case "register":
         return <RegisterPage onNavigate={handleNavigation} />;
       case "club-register":
-        return (
-          <ClubRegistrationPage onNavigate={handleNavigation} />
-        );
+        return <ClubRegistrationPage onNavigate={handleNavigation} />;
       case "dashboard":
-        return (
-          <Dashboard
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <Dashboard user={user} onNavigate={handleNavigation} />;
       case "events":
-        return (
-          <EventsPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <EventsPage user={user} onNavigate={handleNavigation} />;
       case "event-management":
         return (
           <EventManagementPage
@@ -222,23 +188,11 @@ export default function App() {
           />
         );
       case "gallery":
-        return (
-          <GalleryPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <GalleryPage user={user} onNavigate={handleNavigation} />;
       case "club":
-        return (
-          <ClubPage user={user} onNavigate={handleNavigation} />
-        );
+        return <ClubPage user={user} onNavigate={handleNavigation} />;
       case "clubs":
-        return (
-          <ClubsPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <ClubsPage user={user} onNavigate={handleNavigation} />;
       case "club-details":
         return (
           <ClubDetailsPage
@@ -256,33 +210,15 @@ export default function App() {
           />
         );
       case "renewal":
-        return (
-          <RenewalPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <RenewalPage user={user} onNavigate={handleNavigation} />;
       case "admin-management":
         return (
-          <AdminManagementPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
+          <AdminManagementPage user={user} onNavigate={handleNavigation} />
         );
       case "profile":
-        return (
-          <ProfilePage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <ProfilePage user={user} onNavigate={handleNavigation} />;
       case "accounting":
-        return (
-          <AccountingPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <AccountingPage user={user} onNavigate={handleNavigation} />;
       case "sponsors":
         return (
           <SponsorsPage
@@ -292,12 +228,7 @@ export default function App() {
           />
         );
       case "add-sponsor":
-        return (
-          <AddSponsorPage
-            user={user}
-            onNavigate={handleNavigation}
-          />
-        );
+        return <AddSponsorPage user={user} onNavigate={handleNavigation} />;
       case "edit-sponsor":
         return (
           <EditSponsorPage
@@ -307,9 +238,7 @@ export default function App() {
           />
         );
       case "version-history":
-        return (
-          <VersionHistoryPage onNavigate={handleNavigation} />
-        );
+        return <VersionHistoryPage onNavigate={handleNavigation} />;
       default:
         return <LandingPage onNavigate={handleNavigation} />;
     }
@@ -333,15 +262,13 @@ export default function App() {
         <div className="container mx-auto">
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-600">
-              © 2025 Davao-South Regional Football Association.
-              All rights reserved.
+              © 2025 Davao-South Regional Football Association. All rights
+              reserved.
             </div>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() =>
-                handleNavigation("version-history")
-              }
+              onClick={() => handleNavigation("version-history")}
               className="text-gray-500 hover:text-primary hover:bg-primary/10 text-xs"
             >
               <Info className="w-3 h-3 mr-1" />

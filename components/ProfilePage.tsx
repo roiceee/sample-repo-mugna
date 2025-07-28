@@ -1,25 +1,55 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
-import { Switch } from './ui/switch';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Alert, AlertDescription } from './ui/alert';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  User as UserIcon, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  Shield, 
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
+import { Switch } from "./ui/switch";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Alert, AlertDescription } from "./ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  User as UserIcon,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Shield,
   Trophy,
   Edit,
   Save,
@@ -49,9 +79,9 @@ import {
   Smartphone,
   Monitor,
   Fingerprint,
-  UserCheck
-} from 'lucide-react';
-import { NavigationPage, User } from '../App';
+  UserCheck,
+} from "lucide-react";
+import { NavigationPage, User } from "../src/App";
 
 interface ProfilePageProps {
   user: User | null;
@@ -65,9 +95,14 @@ interface Attachment {
   fileSize: string;
   mimeType: string;
   uploadDate: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   rejectionReason?: string;
-  type: 'birth_certificate' | 'id_card' | 'medical_certificate' | 'photo' | 'other';
+  type:
+    | "birth_certificate"
+    | "id_card"
+    | "medical_certificate"
+    | "photo"
+    | "other";
   url: string;
 }
 
@@ -78,7 +113,7 @@ interface AdminSession {
   loginTime: string;
   lastActivity: string;
   ipAddress: string;
-  status: 'active' | 'expired';
+  status: "active" | "expired";
 }
 
 interface AdminActivity {
@@ -93,33 +128,33 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [documentType, setDocumentType] = useState<string>('');
+  const [documentType, setDocumentType] = useState<string>("");
 
   // Regular user form data
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    phone: user?.phone || '+63 917-555-0123',
-    address: user?.location || 'Davao City, Philippines',
-    club: user?.club || '',
-    role: user?.role || 'Player',
-    position: user?.position || 'Midfielder',
-    bio: 'Passionate football player with 5 years of experience in competitive leagues.',
-    emergencyContact: 'Maria Santos - +63 917-555-0124',
-    medicalInfo: 'No known allergies or medical conditions.'
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "+63 917-555-0123",
+    address: user?.location || "Davao City, Philippines",
+    club: user?.club || "",
+    role: user?.role || "Player",
+    position: user?.position || "Midfielder",
+    bio: "Passionate football player with 5 years of experience in competitive leagues.",
+    emergencyContact: "Maria Santos - +63 917-555-0124",
+    medicalInfo: "No known allergies or medical conditions.",
   });
 
   // Admin-specific form data
   const [adminFormData, setAdminFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    phone: user?.phone || '+63 917-555-0100',
-    address: user?.location || 'Davao City, Philippines',
-    department: 'Administration',
-    title: 'System Administrator',
-    employeeId: 'DSRFA-ADM-001',
-    bio: 'Experienced system administrator managing DSRFA digital infrastructure and member services.',
-    emergencyContact: 'John Doe - +63 917-555-0101'
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "+63 917-555-0100",
+    address: user?.location || "Davao City, Philippines",
+    department: "Administration",
+    title: "System Administrator",
+    employeeId: "DSRFA-ADM-001",
+    bio: "Experienced system administrator managing DSRFA digital infrastructure and member services.",
+    emergencyContact: "John Doe - +63 917-555-0101",
   });
 
   // Admin settings
@@ -130,93 +165,129 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
     loginNotifications: true,
     securityAlerts: true,
     systemUpdates: true,
-    maintenanceAlerts: true
+    maintenanceAlerts: true,
   });
 
   // Mock data for admin
   const adminSessions: AdminSession[] = [
     {
-      id: '1',
-      device: 'Windows Desktop',
-      location: 'Davao City, Philippines',
-      loginTime: '2025-06-18 08:30',
-      lastActivity: '2025-06-18 14:25',
-      ipAddress: '192.168.1.100',
-      status: 'active'
+      id: "1",
+      device: "Windows Desktop",
+      location: "Davao City, Philippines",
+      loginTime: "2025-06-18 08:30",
+      lastActivity: "2025-06-18 14:25",
+      ipAddress: "192.168.1.100",
+      status: "active",
     },
     {
-      id: '2',
-      device: 'iPhone 15',
-      location: 'Davao City, Philippines',
-      loginTime: '2025-06-17 19:45',
-      lastActivity: '2025-06-17 22:15',
-      ipAddress: '192.168.1.105',
-      status: 'expired'
-    }
+      id: "2",
+      device: "iPhone 15",
+      location: "Davao City, Philippines",
+      loginTime: "2025-06-17 19:45",
+      lastActivity: "2025-06-17 22:15",
+      ipAddress: "192.168.1.105",
+      status: "expired",
+    },
   ];
 
   const adminActivities: AdminActivity[] = [
     {
-      id: '1',
-      action: 'Member Approved',
-      target: 'Maria Santos',
-      timestamp: '2025-06-18 14:20',
-      details: 'Approved membership application for Maria Santos (ID: DSRFA-M-1247)'
+      id: "1",
+      action: "Member Approved",
+      target: "Maria Santos",
+      timestamp: "2025-06-18 14:20",
+      details:
+        "Approved membership application for Maria Santos (ID: DSRFA-M-1247)",
     },
     {
-      id: '2',
-      action: 'Event Created',
-      target: 'Summer Training Camp',
-      timestamp: '2025-06-18 13:45',
-      details: 'Created new training event scheduled for July 1, 2025'
+      id: "2",
+      action: "Event Created",
+      target: "Summer Training Camp",
+      timestamp: "2025-06-18 13:45",
+      details: "Created new training event scheduled for July 1, 2025",
     },
     {
-      id: '3',
-      action: 'System Settings Updated',
-      target: 'Registration Settings',
-      timestamp: '2025-06-18 11:30',
-      details: 'Updated membership registration settings and approval workflow'
-    }
+      id: "3",
+      action: "System Settings Updated",
+      target: "Registration Settings",
+      timestamp: "2025-06-18 11:30",
+      details: "Updated membership registration settings and approval workflow",
+    },
   ];
 
   // Mock attachments for regular users
   const [attachments] = useState<Attachment[]>([
     {
-      id: '1',
-      name: 'Birth Certificate',
-      fileName: 'birth_certificate.pdf',
-      fileSize: '2.3 MB',
-      mimeType: 'application/pdf',
-      uploadDate: '2025-06-15',
-      status: 'approved',
-      type: 'birth_certificate',
-      url: '#'
+      id: "1",
+      name: "Birth Certificate",
+      fileName: "birth_certificate.pdf",
+      fileSize: "2.3 MB",
+      mimeType: "application/pdf",
+      uploadDate: "2025-06-15",
+      status: "approved",
+      type: "birth_certificate",
+      url: "#",
     },
     {
-      id: '2',
-      name: 'Medical Certificate',
-      fileName: 'medical_cert_2025.pdf',
-      fileSize: '1.8 MB',
-      mimeType: 'application/pdf',
-      uploadDate: '2025-06-16',
-      status: 'pending',
-      type: 'medical_certificate',
-      url: '#'
-    }
+      id: "2",
+      name: "Medical Certificate",
+      fileName: "medical_cert_2025.pdf",
+      fileSize: "1.8 MB",
+      mimeType: "application/pdf",
+      uploadDate: "2025-06-16",
+      status: "pending",
+      type: "medical_certificate",
+      url: "#",
+    },
   ]);
 
   // Profile stats for regular users
-  const profileStats = user?.role !== 'Admin' ? [
-    { icon: <Calendar className="w-4 h-4 text-gray-400" />, label: 'Member Since', value: '2023' },
-    { icon: <Trophy className="w-4 h-4 text-gray-400" />, label: 'Events Joined', value: '12' },
-    { icon: <Shield className="w-4 h-4 text-gray-400" />, label: 'Status', value: user?.membershipStatus || 'Active' },
-    { icon: <UserIcon className="w-4 h-4 text-gray-400" />, label: 'Role', value: user?.role || 'Player' }
-  ] : [
-    { icon: <Shield className="w-4 h-4 text-blue-400" />, label: 'Admin Level', value: 'Super Admin' },
-    { icon: <Users className="w-4 h-4 text-green-400" />, label: 'Members Managed', value: '1,247' },
-    { icon: <Activity className="w-4 h-4 text-purple-400" />, label: 'System Uptime', value: '99.8%' },
-    { icon: <Database className="w-4 h-4 text-orange-400" />, label: 'Last Backup', value: 'Today' }
-  ];
+  const profileStats =
+    user?.role !== "Admin"
+      ? [
+          {
+            icon: <Calendar className="w-4 h-4 text-gray-400" />,
+            label: "Member Since",
+            value: "2023",
+          },
+          {
+            icon: <Trophy className="w-4 h-4 text-gray-400" />,
+            label: "Events Joined",
+            value: "12",
+          },
+          {
+            icon: <Shield className="w-4 h-4 text-gray-400" />,
+            label: "Status",
+            value: user?.membershipStatus || "Active",
+          },
+          {
+            icon: <UserIcon className="w-4 h-4 text-gray-400" />,
+            label: "Role",
+            value: user?.role || "Player",
+          },
+        ]
+      : [
+          {
+            icon: <Shield className="w-4 h-4 text-blue-400" />,
+            label: "Admin Level",
+            value: "Super Admin",
+          },
+          {
+            icon: <Users className="w-4 h-4 text-green-400" />,
+            label: "Members Managed",
+            value: "1,247",
+          },
+          {
+            icon: <Activity className="w-4 h-4 text-purple-400" />,
+            label: "System Uptime",
+            value: "99.8%",
+          },
+          {
+            icon: <Database className="w-4 h-4 text-orange-400" />,
+            label: "Last Backup",
+            value: "Today",
+          },
+        ];
 
   if (!user) {
     return (
@@ -232,21 +303,21 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
   }
 
   const handleInputChange = (field: string, value: string) => {
-    if (user.role === 'Admin') {
-      setAdminFormData(prev => ({ ...prev, [field]: value }));
+    if (user.role === "Admin") {
+      setAdminFormData((prev) => ({ ...prev, [field]: value }));
     } else {
-      setFormData(prev => ({ ...prev, [field]: value }));
+      setFormData((prev) => ({ ...prev, [field]: value }));
     }
   };
 
   const handleAdminSettingChange = (setting: string, value: boolean) => {
-    setAdminSettings(prev => ({ ...prev, [setting]: value }));
+    setAdminSettings((prev) => ({ ...prev, [setting]: value }));
   };
 
   const handleSave = () => {
     // Mock save
     setIsEditing(false);
-    alert('Profile updated successfully!');
+    alert("Profile updated successfully!");
   };
 
   const handleCancel = () => {
@@ -267,7 +338,7 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
       alert(`Uploaded ${selectedFile.name} as ${documentType}`);
       setIsUploadDialogOpen(false);
       setSelectedFile(null);
-      setDocumentType('');
+      setDocumentType("");
     }
   };
 
@@ -277,18 +348,20 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.includes('pdf')) return <FileText className="w-5 h-5 text-red-500" />;
-    if (mimeType.includes('image')) return <FileImage className="w-5 h-5 text-blue-500" />;
+    if (mimeType.includes("pdf"))
+      return <FileText className="w-5 h-5 text-red-500" />;
+    if (mimeType.includes("image"))
+      return <FileImage className="w-5 h-5 text-blue-500" />;
     return <File className="w-5 h-5 text-gray-500" />;
   };
 
   const getAttachmentStatusBadge = (status: string) => {
     switch (status) {
-      case 'approved':
+      case "approved":
         return <Badge className="bg-green-600 text-white">Approved</Badge>;
-      case 'pending':
+      case "pending":
         return <Badge variant="secondary">Pending Review</Badge>;
-      case 'rejected':
+      case "rejected":
         return <Badge variant="destructive">Rejected</Badge>;
       default:
         return null;
@@ -297,19 +370,19 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
   const getDocumentTypeLabel = (type: string) => {
     const labels = {
-      birth_certificate: 'Birth Certificate',
-      id_card: 'ID Card/License',
-      medical_certificate: 'Medical Certificate',
-      photo: 'Photo',
-      other: 'Other Document'
+      birth_certificate: "Birth Certificate",
+      id_card: "ID Card/License",
+      medical_certificate: "Medical Certificate",
+      photo: "Photo",
+      other: "Other Document",
     };
-    return labels[type as keyof typeof labels] || 'Document';
+    return labels[type as keyof typeof labels] || "Document";
   };
 
   // Admin Profile Render
-  if (user.role === 'Admin') {
+  if (user.role === "Admin") {
     const currentData = adminFormData;
-    
+
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
@@ -331,7 +404,10 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                   <Avatar className="w-24 h-24 mx-auto mb-4">
                     <AvatarImage src={user.avatar} alt={user.name} />
                     <AvatarFallback className="bg-red-600 text-white text-2xl">
-                      {user.name.split(' ').map(n => n[0]).join('')}
+                      {user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <h2 className="text-xl font-bold">{user.name}</h2>
@@ -344,18 +420,25 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
                 <div className="space-y-4">
                   {profileStats.map((stat, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
                       <div className="flex items-center space-x-2">
                         {stat.icon}
-                        <span className="text-sm font-medium">{stat.label}</span>
+                        <span className="text-sm font-medium">
+                          {stat.label}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-600">{stat.value}</span>
+                      <span className="text-sm text-gray-600">
+                        {stat.value}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 <Button
-                  onClick={() => onNavigate('admin-management')}
+                  onClick={() => onNavigate("admin-management")}
                   className="w-full mt-6 bg-red-600 hover:bg-red-700 rounded-lg"
                 >
                   <Settings className="w-4 h-4 mr-2" />
@@ -369,22 +452,22 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
           <div className="lg:col-span-2">
             <Tabs defaultValue="profile" className="space-y-6">
               <TabsList className="grid w-full grid-cols-3 bg-gray-100 rounded-xl p-1.5 h-auto">
-                <TabsTrigger 
-                  value="profile" 
+                <TabsTrigger
+                  value="profile"
                   className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
                 >
                   <UserIcon className="w-4 h-4" />
                   <span>Profile & Activity</span>
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="security" 
+                <TabsTrigger
+                  value="security"
                   className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
                 >
                   <Lock className="w-4 h-4" />
                   <span>Security</span>
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="sessions" 
+                <TabsTrigger
+                  value="sessions"
                   className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
                 >
                   <Monitor className="w-4 h-4" />
@@ -442,7 +525,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     <div className="space-y-6">
                       {/* Basic Information */}
                       <div>
-                        <h3 className="text-lg font-medium mb-4">Personal Information</h3>
+                        <h3 className="text-lg font-medium mb-4">
+                          Personal Information
+                        </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="name">Full Name</Label>
@@ -450,7 +535,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               <Input
                                 id="name"
                                 value={currentData.name}
-                                onChange={(e) => handleInputChange('name', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("name", e.target.value)
+                                }
                                 className="rounded-lg"
                               />
                             ) : (
@@ -468,7 +555,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                                 id="email"
                                 type="email"
                                 value={currentData.email}
-                                onChange={(e) => handleInputChange('email', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("email", e.target.value)
+                                }
                                 className="rounded-lg"
                               />
                             ) : (
@@ -485,7 +574,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               <Input
                                 id="phone"
                                 value={currentData.phone}
-                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("phone", e.target.value)
+                                }
                                 className="rounded-lg"
                               />
                             ) : (
@@ -502,7 +593,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               <Input
                                 id="address"
                                 value={currentData.address}
-                                onChange={(e) => handleInputChange('address', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("address", e.target.value)
+                                }
                                 className="rounded-lg"
                               />
                             ) : (
@@ -519,21 +612,38 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
                       {/* Administrative Information */}
                       <div>
-                        <h3 className="text-lg font-medium mb-4">Administrative Details</h3>
+                        <h3 className="text-lg font-medium mb-4">
+                          Administrative Details
+                        </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="department">Department</Label>
                             {isEditing ? (
-                              <Select value={currentData.department} onValueChange={(value) => handleInputChange('department', value)}>
+                              <Select
+                                value={currentData.department}
+                                onValueChange={(value) =>
+                                  handleInputChange("department", value)
+                                }
+                              >
                                 <SelectTrigger className="rounded-lg">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="Administration">Administration</SelectItem>
-                                  <SelectItem value="IT">Information Technology</SelectItem>
-                                  <SelectItem value="Events">Events Management</SelectItem>
-                                  <SelectItem value="Finance">Finance</SelectItem>
-                                  <SelectItem value="Operations">Operations</SelectItem>
+                                  <SelectItem value="Administration">
+                                    Administration
+                                  </SelectItem>
+                                  <SelectItem value="IT">
+                                    Information Technology
+                                  </SelectItem>
+                                  <SelectItem value="Events">
+                                    Events Management
+                                  </SelectItem>
+                                  <SelectItem value="Finance">
+                                    Finance
+                                  </SelectItem>
+                                  <SelectItem value="Operations">
+                                    Operations
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             ) : (
@@ -549,7 +659,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               <Input
                                 id="title"
                                 value={currentData.title}
-                                onChange={(e) => handleInputChange('title', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("title", e.target.value)
+                                }
                                 className="rounded-lg"
                               />
                             ) : (
@@ -562,17 +674,26 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                           <div className="space-y-2">
                             <Label htmlFor="employeeId">Employee ID</Label>
                             <div className="p-2 bg-gray-50 rounded-lg">
-                              <span className="font-mono">{currentData.employeeId}</span>
+                              <span className="font-mono">
+                                {currentData.employeeId}
+                              </span>
                             </div>
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="emergencyContact">Emergency Contact</Label>
+                            <Label htmlFor="emergencyContact">
+                              Emergency Contact
+                            </Label>
                             {isEditing ? (
                               <Input
                                 id="emergencyContact"
                                 value={currentData.emergencyContact}
-                                onChange={(e) => handleInputChange('emergencyContact', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "emergencyContact",
+                                    e.target.value
+                                  )
+                                }
                                 placeholder="Name - Phone Number"
                                 className="rounded-lg"
                               />
@@ -589,7 +710,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               <Textarea
                                 id="bio"
                                 value={currentData.bio}
-                                onChange={(e) => handleInputChange('bio', e.target.value)}
+                                onChange={(e) =>
+                                  handleInputChange("bio", e.target.value)
+                                }
                                 rows={3}
                                 className="rounded-lg"
                               />
@@ -604,7 +727,7 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     </div>
                   </CardContent>
                 </Card>
-                 
+
                 {/* Recent Activity Section */}
                 <Card className="rounded-lg">
                   <CardHeader>
@@ -619,13 +742,26 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                   <CardContent>
                     <div className="space-y-4">
                       {adminActivities.map((activity) => (
-                        <div key={activity.id} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                        <div
+                          key={activity.id}
+                          className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg"
+                        >
                           <div className="flex-shrink-0">
                             <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                              {activity.action.includes('Member') && <UserCheck className="w-5 h-5 text-white" />}
-                              {activity.action.includes('Event') && <Calendar className="w-5 h-5 text-white" />}
-                              {activity.action.includes('System') && <Settings className="w-5 h-5 text-white" />}
-                              {!activity.action.includes('Member') && !activity.action.includes('Event') && !activity.action.includes('System') && <Activity className="w-5 h-5 text-white" />}
+                              {activity.action.includes("Member") && (
+                                <UserCheck className="w-5 h-5 text-white" />
+                              )}
+                              {activity.action.includes("Event") && (
+                                <Calendar className="w-5 h-5 text-white" />
+                              )}
+                              {activity.action.includes("System") && (
+                                <Settings className="w-5 h-5 text-white" />
+                              )}
+                              {!activity.action.includes("Member") &&
+                                !activity.action.includes("Event") &&
+                                !activity.action.includes("System") && (
+                                  <Activity className="w-5 h-5 text-white" />
+                                )}
                             </div>
                           </div>
                           <div className="flex-1">
@@ -646,7 +782,7 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         </div>
                       ))}
                     </div>
-                     
+
                     {/* View All Activity Button */}
                     <div className="mt-6 text-center">
                       <Button variant="outline" className="rounded-lg">
@@ -674,34 +810,56 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <Label className="text-base">Two-Factor Authentication</Label>
-                          <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                          <Label className="text-base">
+                            Two-Factor Authentication
+                          </Label>
+                          <p className="text-sm text-gray-500">
+                            Add an extra layer of security to your account
+                          </p>
                         </div>
                         <Switch
                           checked={adminSettings.twoFactorEnabled}
-                          onCheckedChange={(checked) => handleAdminSettingChange('twoFactorEnabled', checked)}
+                          onCheckedChange={(checked) =>
+                            handleAdminSettingChange(
+                              "twoFactorEnabled",
+                              checked
+                            )
+                          }
                         />
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div>
-                          <Label className="text-base">Login Notifications</Label>
-                          <p className="text-sm text-gray-500">Get notified when someone logs into your account</p>
+                          <Label className="text-base">
+                            Login Notifications
+                          </Label>
+                          <p className="text-sm text-gray-500">
+                            Get notified when someone logs into your account
+                          </p>
                         </div>
                         <Switch
                           checked={adminSettings.loginNotifications}
-                          onCheckedChange={(checked) => handleAdminSettingChange('loginNotifications', checked)}
+                          onCheckedChange={(checked) =>
+                            handleAdminSettingChange(
+                              "loginNotifications",
+                              checked
+                            )
+                          }
                         />
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div>
                           <Label className="text-base">Security Alerts</Label>
-                          <p className="text-sm text-gray-500">Receive alerts about security events</p>
+                          <p className="text-sm text-gray-500">
+                            Receive alerts about security events
+                          </p>
                         </div>
                         <Switch
                           checked={adminSettings.securityAlerts}
-                          onCheckedChange={(checked) => handleAdminSettingChange('securityAlerts', checked)}
+                          onCheckedChange={(checked) =>
+                            handleAdminSettingChange("securityAlerts", checked)
+                          }
                         />
                       </div>
                     </div>
@@ -715,28 +873,45 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                           <Label>Email Notifications</Label>
                           <Switch
                             checked={adminSettings.emailNotifications}
-                            onCheckedChange={(checked) => handleAdminSettingChange('emailNotifications', checked)}
+                            onCheckedChange={(checked) =>
+                              handleAdminSettingChange(
+                                "emailNotifications",
+                                checked
+                              )
+                            }
                           />
                         </div>
                         <div className="flex items-center justify-between">
                           <Label>SMS Notifications</Label>
                           <Switch
                             checked={adminSettings.smsNotifications}
-                            onCheckedChange={(checked) => handleAdminSettingChange('smsNotifications', checked)}
+                            onCheckedChange={(checked) =>
+                              handleAdminSettingChange(
+                                "smsNotifications",
+                                checked
+                              )
+                            }
                           />
                         </div>
                         <div className="flex items-center justify-between">
                           <Label>System Update Notifications</Label>
                           <Switch
                             checked={adminSettings.systemUpdates}
-                            onCheckedChange={(checked) => handleAdminSettingChange('systemUpdates', checked)}
+                            onCheckedChange={(checked) =>
+                              handleAdminSettingChange("systemUpdates", checked)
+                            }
                           />
                         </div>
                         <div className="flex items-center justify-between">
                           <Label>Maintenance Alerts</Label>
                           <Switch
                             checked={adminSettings.maintenanceAlerts}
-                            onCheckedChange={(checked) => handleAdminSettingChange('maintenanceAlerts', checked)}
+                            onCheckedChange={(checked) =>
+                              handleAdminSettingChange(
+                                "maintenanceAlerts",
+                                checked
+                              )
+                            }
                           />
                         </div>
                       </div>
@@ -747,19 +922,31 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     <div className="space-y-4">
                       <h4 className="font-medium">Security Actions</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button variant="outline" className="justify-start rounded-lg">
+                        <Button
+                          variant="outline"
+                          className="justify-start rounded-lg"
+                        >
                           <Key className="w-4 h-4 mr-2" />
                           Change Password
                         </Button>
-                        <Button variant="outline" className="justify-start rounded-lg">
+                        <Button
+                          variant="outline"
+                          className="justify-start rounded-lg"
+                        >
                           <Fingerprint className="w-4 h-4 mr-2" />
                           Setup 2FA
                         </Button>
-                        <Button variant="outline" className="justify-start text-red-600 rounded-lg">
+                        <Button
+                          variant="outline"
+                          className="justify-start text-red-600 rounded-lg"
+                        >
                           <AlertCircle className="w-4 h-4 mr-2" />
                           Force Logout All
                         </Button>
-                        <Button variant="outline" className="justify-start rounded-lg">
+                        <Button
+                          variant="outline"
+                          className="justify-start rounded-lg"
+                        >
                           <Activity className="w-4 h-4 mr-2" />
                           View Security Log
                         </Button>
@@ -784,17 +971,23 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                   <CardContent>
                     <div className="space-y-4">
                       {adminSessions.map((session) => (
-                        <div key={session.id} className="border border-gray-200 rounded-lg p-4">
+                        <div
+                          key={session.id}
+                          className="border border-gray-200 rounded-lg p-4"
+                        >
                           <div className="flex items-center justify-between">
                             <div className="flex items-start space-x-3">
                               <div className="mt-1">
-                                {session.device.includes('iPhone') ? 
-                                  <Smartphone className="w-5 h-5 text-gray-500" /> : 
+                                {session.device.includes("iPhone") ? (
+                                  <Smartphone className="w-5 h-5 text-gray-500" />
+                                ) : (
                                   <Monitor className="w-5 h-5 text-gray-500" />
-                                }
+                                )}
                               </div>
                               <div>
-                                <h4 className="font-medium text-gray-900">{session.device}</h4>
+                                <h4 className="font-medium text-gray-900">
+                                  {session.device}
+                                </h4>
                                 <p className="text-sm text-gray-600 flex items-center mt-1">
                                   <MapPin className="w-3 h-3 mr-1" />
                                   {session.location}
@@ -807,14 +1000,26 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <Badge 
-                                variant={session.status === 'active' ? 'default' : 'secondary'}
-                                className={session.status === 'active' ? 'bg-green-600' : ''}
+                              <Badge
+                                variant={
+                                  session.status === "active"
+                                    ? "default"
+                                    : "secondary"
+                                }
+                                className={
+                                  session.status === "active"
+                                    ? "bg-green-600"
+                                    : ""
+                                }
                               >
                                 {session.status}
                               </Badge>
-                              {session.status === 'active' && (
-                                <Button size="sm" variant="destructive" className="rounded-lg">
+                              {session.status === "active" && (
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  className="rounded-lg"
+                                >
                                   <X className="w-3 h-3 mr-1" />
                                   End Session
                                 </Button>
@@ -856,14 +1061,23 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                 <Avatar className="w-24 h-24 mx-auto mb-4">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="bg-green-600 text-white text-2xl">
-                    {user.name.split(' ').map(n => n[0]).join('')}
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <h2 className="text-xl font-bold">{user.name}</h2>
-                <p className="text-gray-600">{user.role} at {user.club}</p>
-                <Badge 
-                  variant={user.membershipStatus === 'Active' ? 'default' : 'destructive'}
-                  className={`mt-2 rounded-lg ${user.membershipStatus === 'Active' ? 'bg-green-600' : ''}`}
+                <p className="text-gray-600">
+                  {user.role} at {user.club}
+                </p>
+                <Badge
+                  variant={
+                    user.membershipStatus === "Active"
+                      ? "default"
+                      : "destructive"
+                  }
+                  className={`mt-2 rounded-lg ${user.membershipStatus === "Active" ? "bg-green-600" : ""}`}
                 >
                   {user.membershipStatus} Member
                 </Badge>
@@ -871,7 +1085,10 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
               <div className="space-y-4">
                 {profileStats.map((stat, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
                     <div className="flex items-center space-x-2">
                       {stat.icon}
                       <span className="text-sm font-medium">{stat.label}</span>
@@ -882,7 +1099,7 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
               </div>
 
               <Button
-                onClick={() => onNavigate('renewal')}
+                onClick={() => onNavigate("renewal")}
                 className="w-full mt-6 bg-green-600 hover:bg-green-700 rounded-lg"
               >
                 Renew Membership
@@ -942,7 +1159,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
               <div className="space-y-6">
                 {/* Basic Information */}
                 <div>
-                  <h3 className="text-lg font-medium mb-4">Basic Information</h3>
+                  <h3 className="text-lg font-medium mb-4">
+                    Basic Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
@@ -950,7 +1169,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Input
                           id="name"
                           value={formData.name}
-                          onChange={(e) => handleInputChange('name', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
                           className="rounded-lg"
                         />
                       ) : (
@@ -968,7 +1189,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                           id="email"
                           type="email"
                           value={formData.email}
-                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("email", e.target.value)
+                          }
                           className="rounded-lg"
                         />
                       ) : (
@@ -985,7 +1208,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Input
                           id="phone"
                           value={formData.phone}
-                          onChange={(e) => handleInputChange('phone', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("phone", e.target.value)
+                          }
                           className="rounded-lg"
                         />
                       ) : (
@@ -1002,7 +1227,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Input
                           id="address"
                           value={formData.address}
-                          onChange={(e) => handleInputChange('address', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("address", e.target.value)
+                          }
                           className="rounded-lg"
                         />
                       ) : (
@@ -1019,7 +1246,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
                 {/* Football Information */}
                 <div>
-                  <h3 className="text-lg font-medium mb-4">Football Information</h3>
+                  <h3 className="text-lg font-medium mb-4">
+                    Football Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="club">Club/Team</Label>
@@ -1027,7 +1256,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Input
                           id="club"
                           value={formData.club}
-                          onChange={(e) => handleInputChange('club', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("club", e.target.value)
+                          }
                           className="rounded-lg"
                         />
                       ) : (
@@ -1040,7 +1271,12 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     <div className="space-y-2">
                       <Label htmlFor="role">Role</Label>
                       {isEditing ? (
-                        <Select value={formData.role} onValueChange={(value) => handleInputChange('role', value)}>
+                        <Select
+                          value={formData.role}
+                          onValueChange={(value) =>
+                            handleInputChange("role", value)
+                          }
+                        >
                           <SelectTrigger className="rounded-lg">
                             <SelectValue />
                           </SelectTrigger>
@@ -1058,18 +1294,27 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                       )}
                     </div>
 
-                    {formData.role === 'Player' && (
+                    {formData.role === "Player" && (
                       <div className="space-y-2">
                         <Label htmlFor="position">Position</Label>
                         {isEditing ? (
-                          <Select value={formData.position} onValueChange={(value) => handleInputChange('position', value)}>
+                          <Select
+                            value={formData.position}
+                            onValueChange={(value) =>
+                              handleInputChange("position", value)
+                            }
+                          >
                             <SelectTrigger className="rounded-lg">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
+                              <SelectItem value="Goalkeeper">
+                                Goalkeeper
+                              </SelectItem>
                               <SelectItem value="Defender">Defender</SelectItem>
-                              <SelectItem value="Midfielder">Midfielder</SelectItem>
+                              <SelectItem value="Midfielder">
+                                Midfielder
+                              </SelectItem>
                               <SelectItem value="Forward">Forward</SelectItem>
                             </SelectContent>
                           </Select>
@@ -1087,7 +1332,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Textarea
                           id="bio"
                           value={formData.bio}
-                          onChange={(e) => handleInputChange('bio', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("bio", e.target.value)
+                          }
                           rows={3}
                           className="rounded-lg"
                         />
@@ -1104,15 +1351,24 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
 
                 {/* Emergency & Medical Information */}
                 <div>
-                  <h3 className="text-lg font-medium mb-4">Emergency & Medical Information</h3>
+                  <h3 className="text-lg font-medium mb-4">
+                    Emergency & Medical Information
+                  </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="emergencyContact">Emergency Contact</Label>
+                      <Label htmlFor="emergencyContact">
+                        Emergency Contact
+                      </Label>
                       {isEditing ? (
                         <Input
                           id="emergencyContact"
                           value={formData.emergencyContact}
-                          onChange={(e) => handleInputChange('emergencyContact', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "emergencyContact",
+                              e.target.value
+                            )
+                          }
                           placeholder="Name - Phone Number"
                           className="rounded-lg"
                         />
@@ -1129,7 +1385,9 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                         <Textarea
                           id="medicalInfo"
                           value={formData.medicalInfo}
-                          onChange={(e) => handleInputChange('medicalInfo', e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("medicalInfo", e.target.value)
+                          }
                           placeholder="Allergies, medical conditions, medications..."
                           rows={3}
                           className="rounded-lg"
@@ -1159,9 +1417,15 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     Upload and manage your identity documents and certificates
                   </CardDescription>
                 </div>
-                <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+                <Dialog
+                  open={isUploadDialogOpen}
+                  onOpenChange={setIsUploadDialogOpen}
+                >
                   <DialogTrigger asChild>
-                    <Button size="sm" className="bg-logo-green hover:bg-green-600 text-white rounded-lg">
+                    <Button
+                      size="sm"
+                      className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Upload Document
                     </Button>
@@ -1170,27 +1434,39 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     <DialogHeader>
                       <DialogTitle>Upload Document</DialogTitle>
                       <DialogDescription>
-                        Upload a new document for verification. Accepted formats: PDF, JPEG, PNG (max 10MB)
+                        Upload a new document for verification. Accepted
+                        formats: PDF, JPEG, PNG (max 10MB)
                       </DialogDescription>
                     </DialogHeader>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="documentType">Document Type</Label>
-                        <Select value={documentType} onValueChange={(value: any) => setDocumentType(value)}>
+                        <Select
+                          value={documentType}
+                          onValueChange={(value: any) => setDocumentType(value)}
+                        >
                           <SelectTrigger className="rounded-lg mt-2">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="birth_certificate">Birth Certificate</SelectItem>
-                            <SelectItem value="id_card">ID Card/License</SelectItem>
-                            <SelectItem value="medical_certificate">Medical Certificate</SelectItem>
+                            <SelectItem value="birth_certificate">
+                              Birth Certificate
+                            </SelectItem>
+                            <SelectItem value="id_card">
+                              ID Card/License
+                            </SelectItem>
+                            <SelectItem value="medical_certificate">
+                              Medical Certificate
+                            </SelectItem>
                             <SelectItem value="photo">Photo</SelectItem>
-                            <SelectItem value="other">Other Document</SelectItem>
+                            <SelectItem value="other">
+                              Other Document
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div>
                         <Label htmlFor="file">Choose File</Label>
                         <Input
@@ -1201,15 +1477,18 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                           className="rounded-lg mt-2"
                         />
                       </div>
-                      
+
                       {selectedFile && (
                         <div className="p-3 bg-gray-50 rounded-lg">
                           <div className="flex items-center space-x-2">
                             {getFileIcon(selectedFile.type)}
                             <div className="flex-1">
-                              <p className="font-medium text-sm">{selectedFile.name}</p>
+                              <p className="font-medium text-sm">
+                                {selectedFile.name}
+                              </p>
                               <p className="text-xs text-gray-500">
-                                {(selectedFile.size / 1024 / 1024).toFixed(1)} MB
+                                {(selectedFile.size / 1024 / 1024).toFixed(1)}{" "}
+                                MB
                               </p>
                             </div>
                           </div>
@@ -1218,8 +1497,8 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                     </div>
 
                     <DialogFooter>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         onClick={() => {
                           setIsUploadDialogOpen(false);
                           setSelectedFile(null);
@@ -1228,7 +1507,7 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                       >
                         Cancel
                       </Button>
-                      <Button 
+                      <Button
                         onClick={handleUploadSubmit}
                         disabled={!selectedFile}
                         className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
@@ -1245,36 +1524,49 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
               {attachments.length > 0 ? (
                 <div className="space-y-4">
                   {attachments.map((attachment) => (
-                    <div key={attachment.id} className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                    <div
+                      key={attachment.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors"
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-3 flex-1">
                           <div className="mt-1">
                             {getFileIcon(attachment.mimeType)}
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center space-x-2 mb-1">
-                              <h4 className="font-medium text-gray-900">{attachment.name}</h4>
+                              <h4 className="font-medium text-gray-900">
+                                {attachment.name}
+                              </h4>
                               {getAttachmentStatusBadge(attachment.status)}
                             </div>
-                            
+
                             <p className="text-sm text-gray-600 mb-1">
-                              {getDocumentTypeLabel(attachment.type)} • {attachment.fileName}
+                              {getDocumentTypeLabel(attachment.type)} •{" "}
+                              {attachment.fileName}
                             </p>
-                            
+
                             <div className="flex items-center space-x-4 text-xs text-gray-500">
                               <span>{attachment.fileSize}</span>
-                              <span>Uploaded {new Date(attachment.uploadDate).toLocaleDateString()}</span>
+                              <span>
+                                Uploaded{" "}
+                                {new Date(
+                                  attachment.uploadDate
+                                ).toLocaleDateString()}
+                              </span>
                             </div>
-                            
-                            {attachment.status === 'rejected' && attachment.rejectionReason && (
-                              <Alert className="mt-2">
-                                <AlertCircle className="h-4 w-4" />
-                                <AlertDescription className="text-sm">
-                                  <strong>Rejected:</strong> {attachment.rejectionReason}
-                                </AlertDescription>
-                              </Alert>
-                            )}
+
+                            {attachment.status === "rejected" &&
+                              attachment.rejectionReason && (
+                                <Alert className="mt-2">
+                                  <AlertCircle className="h-4 w-4" />
+                                  <AlertDescription className="text-sm">
+                                    <strong>Rejected:</strong>{" "}
+                                    {attachment.rejectionReason}
+                                  </AlertDescription>
+                                </Alert>
+                              )}
                           </div>
                         </div>
 
@@ -1282,19 +1574,21 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(attachment.url, '_blank')}
+                            onClick={() =>
+                              window.open(attachment.url, "_blank")
+                            }
                             className="rounded-lg"
                           >
                             <Eye className="w-3 h-3 mr-1" />
                             View
                           </Button>
-                          
+
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => {
                               // In a real app, this would trigger a download
-                              console.log('Downloading:', attachment.fileName);
+                              console.log("Downloading:", attachment.fileName);
                             }}
                             className="rounded-lg"
                           >
@@ -1315,15 +1609,23 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Document</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                  Delete Document
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Are you sure you want to delete "{attachment.name}"? This action cannot be undone.
+                                  Are you sure you want to delete "
+                                  {attachment.name}"? This action cannot be
+                                  undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
-                                <AlertDialogAction 
-                                  onClick={() => handleDeleteDocument(attachment.id)}
+                                <AlertDialogCancel className="rounded-lg">
+                                  Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() =>
+                                    handleDeleteDocument(attachment.id)
+                                  }
                                   className="bg-red-600 hover:bg-red-700 rounded-lg"
                                 >
                                   Delete
@@ -1339,11 +1641,17 @@ export function ProfilePage({ user, onNavigate }: ProfilePageProps) {
               ) : (
                 <div className="text-center py-8">
                   <Paperclip className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <h4 className="text-lg font-medium text-gray-900 mb-2">No documents uploaded</h4>
+                  <h4 className="text-lg font-medium text-gray-900 mb-2">
+                    No documents uploaded
+                  </h4>
                   <p className="text-gray-600 mb-4">
-                    Upload your identity documents and certificates for verification.
+                    Upload your identity documents and certificates for
+                    verification.
                   </p>
-                  <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+                  <Dialog
+                    open={isUploadDialogOpen}
+                    onOpenChange={setIsUploadDialogOpen}
+                  >
                     <DialogTrigger asChild>
                       <Button className="bg-logo-green hover:bg-green-600 text-white rounded-lg">
                         <Plus className="w-4 h-4 mr-2" />

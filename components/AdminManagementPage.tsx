@@ -1,36 +1,57 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Switch } from './ui/switch';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Separator } from './ui/separator';
-import { Alert, AlertDescription } from './ui/alert';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  Settings, 
-  Users, 
-  Shield, 
-  Database, 
-  Mail, 
-  Bell, 
-  Globe, 
-  Lock, 
-  Eye, 
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Switch } from "./ui/switch";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Separator } from "./ui/separator";
+import { Alert, AlertDescription } from "./ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  Settings,
+  Users,
+  Shield,
+  Database,
+  Mail,
+  Bell,
+  Globe,
+  Lock,
+  Eye,
   EyeOff,
-  AlertCircle, 
-  CheckCircle, 
-  Save, 
-  RefreshCw, 
-  Download, 
-  Upload, 
-  Trash2, 
+  AlertCircle,
+  CheckCircle,
+  Save,
+  RefreshCw,
+  Download,
+  Upload,
+  Trash2,
   Plus,
   Edit,
   UserPlus,
@@ -38,13 +59,19 @@ import {
   Activity,
   BarChart3,
   FileText,
-  Calendar
-} from 'lucide-react';
-import { NavigationPage, User } from '../App';
+  Calendar,
+} from "lucide-react";
+import { NavigationPage, User } from "../src/App";
 
 interface AdminManagementPageProps {
   user: User | null;
-  onNavigate: (page: NavigationPage, memberId?: string, sponsorId?: string, tab?: string, eventId?: string) => void;
+  onNavigate: (
+    page: NavigationPage,
+    memberId?: string,
+    sponsorId?: string,
+    tab?: string,
+    eventId?: string
+  ) => void;
 }
 
 interface SystemSettings {
@@ -63,51 +90,54 @@ interface AdminUser {
   name: string;
   email: string;
   role: string;
-  status: 'Active' | 'Inactive';
+  status: "Active" | "Inactive";
   lastLogin: string;
   permissions: string[];
 }
 
-export function AdminManagementPage({ user, onNavigate }: AdminManagementPageProps) {
+export function AdminManagementPage({
+  user,
+  onNavigate,
+}: AdminManagementPageProps) {
   const [settings, setSettings] = useState<SystemSettings>({
-    siteName: 'Davao-South Regional Football Association',
+    siteName: "Davao-South Regional Football Association",
     maintenanceMode: false,
     registrationEnabled: true,
     emailNotifications: true,
     smsNotifications: false,
     autoApproval: false,
-    membershipFee: '150',
-    sessionTimeout: '30'
+    membershipFee: "150",
+    sessionTimeout: "30",
   });
 
   const [adminUsers] = useState<AdminUser[]>([
     {
-      id: '1',
-      name: 'John Admin',
-      email: 'john.admin@dsrfa.org',
-      role: 'Super Admin',
-      status: 'Active',
-      lastLogin: '2025-06-18 09:30',
-      permissions: ['All Permissions']
+      id: "1",
+      name: "John Admin",
+      email: "john.admin@dsrfa.org",
+      role: "Super Admin",
+      status: "Active",
+      lastLogin: "2025-06-18 09:30",
+      permissions: ["All Permissions"],
     },
     {
-      id: '2',
-      name: 'Maria Manager',
-      email: 'maria.manager@dsrfa.org',
-      role: 'Event Manager',
-      status: 'Active',
-      lastLogin: '2025-06-17 14:15',
-      permissions: ['Events', 'Members', 'Sponsors']
+      id: "2",
+      name: "Maria Manager",
+      email: "maria.manager@dsrfa.org",
+      role: "Event Manager",
+      status: "Active",
+      lastLogin: "2025-06-17 14:15",
+      permissions: ["Events", "Members", "Sponsors"],
     },
     {
-      id: '3',
-      name: 'Carlos Coordinator',
-      email: 'carlos.coord@dsrfa.org',
-      role: 'Member Coordinator',
-      status: 'Inactive',
-      lastLogin: '2025-06-15 11:45',
-      permissions: ['Members', 'Gallery']
-    }
+      id: "3",
+      name: "Carlos Coordinator",
+      email: "carlos.coord@dsrfa.org",
+      role: "Member Coordinator",
+      status: "Inactive",
+      lastLogin: "2025-06-15 11:45",
+      permissions: ["Members", "Gallery"],
+    },
   ]);
 
   const [systemStats] = useState({
@@ -116,14 +146,14 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
     pendingApprovals: 23,
     totalEvents: 45,
     totalRevenue: 45650,
-    systemUptime: '99.8%'
+    systemUptime: "99.8%",
   });
 
   const [isAddAdminOpen, setIsAddAdminOpen] = useState(false);
   const [isSaveLoading, setIsSaveLoading] = useState(false);
 
   // Access control check
-  if (!user || user.role !== 'Admin') {
+  if (!user || user.role !== "Admin") {
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert>
@@ -136,30 +166,37 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
     );
   }
 
-  const handleSettingsChange = (key: keyof SystemSettings, value: string | boolean) => {
-    setSettings(prev => ({
+  const handleSettingsChange = (
+    key: keyof SystemSettings,
+    value: string | boolean
+  ) => {
+    setSettings((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
   const handleSaveSettings = async () => {
     setIsSaveLoading(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSaveLoading(false);
     // Show success message
-    alert('Settings saved successfully!');
+    alert("Settings saved successfully!");
   };
 
   const handleBackupDownload = () => {
     // Mock backup download
-    alert('System backup download started. You will receive an email when the backup is ready.');
+    alert(
+      "System backup download started. You will receive an email when the backup is ready."
+    );
   };
 
   const handleDataImport = () => {
     // Mock data import
-    alert('Data import functionality will open a file dialog to upload CSV/Excel files.');
+    alert(
+      "Data import functionality will open a file dialog to upload CSV/Excel files."
+    );
   };
 
   const formatCurrency = (amount: number) => {
@@ -171,49 +208,50 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Admin Management</h1>
         <p className="text-gray-600">
-          System configuration, user management, and administrative tools for DSRFA
+          System configuration, user management, and administrative tools for
+          DSRFA
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6 bg-gray-100 rounded-xl p-1.5 h-auto">
-          <TabsTrigger 
-            value="overview" 
+          <TabsTrigger
+            value="overview"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <BarChart3 className="w-4 h-4" />
             <span>Overview</span>
           </TabsTrigger>
-          <TabsTrigger 
-            value="settings" 
+          <TabsTrigger
+            value="settings"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <Settings className="w-4 h-4" />
             <span>Settings</span>
           </TabsTrigger>
-          <TabsTrigger 
-            value="users" 
+          <TabsTrigger
+            value="users"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <Shield className="w-4 h-4" />
             <span>Admin Users</span>
           </TabsTrigger>
-          <TabsTrigger 
-            value="security" 
+          <TabsTrigger
+            value="security"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <Lock className="w-4 h-4" />
             <span>Security</span>
           </TabsTrigger>
-          <TabsTrigger 
-            value="notifications" 
+          <TabsTrigger
+            value="notifications"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <Bell className="w-4 h-4" />
             <span>Notifications</span>
           </TabsTrigger>
-          <TabsTrigger 
-            value="data" 
+          <TabsTrigger
+            value="data"
             className="flex items-center space-x-2 rounded-lg py-3 px-4 text-sm font-medium transition-all duration-200 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/60 hover:text-gray-900"
           >
             <Database className="w-4 h-4" />
@@ -229,8 +267,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <Users className="w-8 h-8 text-blue-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Total Members</p>
-                    <p className="text-2xl font-bold text-gray-900">{systemStats.totalMembers.toLocaleString()}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      Total Members
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {systemStats.totalMembers.toLocaleString()}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -241,8 +283,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <CheckCircle className="w-8 h-8 text-green-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Active Members</p>
-                    <p className="text-2xl font-bold text-gray-900">{systemStats.activeMembers.toLocaleString()}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      Active Members
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {systemStats.activeMembers.toLocaleString()}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -253,8 +299,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <AlertCircle className="w-8 h-8 text-yellow-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Pending Approvals</p>
-                    <p className="text-2xl font-bold text-gray-900">{systemStats.pendingApprovals}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      Pending Approvals
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {systemStats.pendingApprovals}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -265,8 +315,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <Calendar className="w-8 h-8 text-purple-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Total Events</p>
-                    <p className="text-2xl font-bold text-gray-900">{systemStats.totalEvents}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      Total Events
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {systemStats.totalEvents}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -277,8 +331,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <BarChart3 className="w-8 h-8 text-green-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Total Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(systemStats.totalRevenue)}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      Total Revenue
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {formatCurrency(systemStats.totalRevenue)}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -289,8 +347,12 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center">
                   <Activity className="w-8 h-8 text-indigo-600 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">System Uptime</p>
-                    <p className="text-2xl font-bold text-gray-900">{systemStats.systemUptime}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      System Uptime
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {systemStats.systemUptime}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -306,7 +368,7 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Button
                   variant="outline"
-                  onClick={() => onNavigate('members')}
+                  onClick={() => onNavigate("members")}
                   className="h-20 flex flex-col items-center justify-center space-y-2"
                 >
                   <Users className="w-6 h-6" />
@@ -314,7 +376,7 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => onNavigate('events')}
+                  onClick={() => onNavigate("events")}
                   className="h-20 flex flex-col items-center justify-center space-y-2"
                 >
                   <Calendar className="w-6 h-6" />
@@ -322,7 +384,7 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => onNavigate('sponsors')}
+                  onClick={() => onNavigate("sponsors")}
                   className="h-20 flex flex-col items-center justify-center space-y-2"
                 >
                   <Shield className="w-6 h-6" />
@@ -330,7 +392,7 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => onNavigate('accounting')}
+                  onClick={() => onNavigate("accounting")}
                   className="h-20 flex flex-col items-center justify-center space-y-2"
                 >
                   <BarChart3 className="w-6 h-6" />
@@ -358,25 +420,35 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <Input
                       id="siteName"
                       value={settings.siteName}
-                      onChange={(e) => handleSettingsChange('siteName', e.target.value)}
+                      onChange={(e) =>
+                        handleSettingsChange("siteName", e.target.value)
+                      }
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="membershipFee">Default Membership Fee (₱)</Label>
+                    <Label htmlFor="membershipFee">
+                      Default Membership Fee (₱)
+                    </Label>
                     <Input
                       id="membershipFee"
                       type="number"
                       value={settings.membershipFee}
-                      onChange={(e) => handleSettingsChange('membershipFee', e.target.value)}
+                      onChange={(e) =>
+                        handleSettingsChange("membershipFee", e.target.value)
+                      }
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="sessionTimeout">Session Timeout (minutes)</Label>
-                    <Select 
-                      value={settings.sessionTimeout} 
-                      onValueChange={(value) => handleSettingsChange('sessionTimeout', value)}
+                    <Label htmlFor="sessionTimeout">
+                      Session Timeout (minutes)
+                    </Label>
+                    <Select
+                      value={settings.sessionTimeout}
+                      onValueChange={(value) =>
+                        handleSettingsChange("sessionTimeout", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -397,32 +469,49 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <Switch
                       id="maintenance"
                       checked={settings.maintenanceMode}
-                      onCheckedChange={(checked) => handleSettingsChange('maintenanceMode', checked)}
+                      onCheckedChange={(checked) =>
+                        handleSettingsChange("maintenanceMode", checked)
+                      }
                     />
                   </div>
 
                   {/* Enhanced Registration Setting with RadioGroup */}
                   <div className="space-y-3">
                     <Label>Member Registration</Label>
-                    <RadioGroup 
-                      value={settings.registrationEnabled ? "enabled" : "disabled"}
-                      onValueChange={(value) => handleSettingsChange('registrationEnabled', value === "enabled")}
+                    <RadioGroup
+                      value={
+                        settings.registrationEnabled ? "enabled" : "disabled"
+                      }
+                      onValueChange={(value) =>
+                        handleSettingsChange(
+                          "registrationEnabled",
+                          value === "enabled"
+                        )
+                      }
                       className="grid grid-cols-1 md:grid-cols-2 gap-3"
                     >
                       <div className="space-y-2">
                         <label
                           htmlFor="registration-enabled"
                           className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                            settings.registrationEnabled 
-                              ? 'border-green-500 bg-green-50 ring-2 ring-green-500 ring-opacity-20' 
-                              : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                            settings.registrationEnabled
+                              ? "border-green-500 bg-green-50 ring-2 ring-green-500 ring-opacity-20"
+                              : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
                           }`}
                         >
-                          <RadioGroupItem value="enabled" id="registration-enabled" className="border-green-500" />
+                          <RadioGroupItem
+                            value="enabled"
+                            id="registration-enabled"
+                            className="border-green-500"
+                          />
                           <div className="flex items-center space-x-2">
-                            <Eye className={`w-5 h-5 ${settings.registrationEnabled ? 'text-green-600' : 'text-gray-400'}`} />
+                            <Eye
+                              className={`w-5 h-5 ${settings.registrationEnabled ? "text-green-600" : "text-gray-400"}`}
+                            />
                             <div>
-                              <p className={`font-medium ${settings.registrationEnabled ? 'text-green-900' : 'text-gray-700'}`}>
+                              <p
+                                className={`font-medium ${settings.registrationEnabled ? "text-green-900" : "text-gray-700"}`}
+                              >
                                 Enabled
                               </p>
                               <p className="text-sm text-gray-500">
@@ -437,16 +526,24 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                         <label
                           htmlFor="registration-disabled"
                           className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                            !settings.registrationEnabled 
-                              ? 'border-red-500 bg-red-50 ring-2 ring-red-500 ring-opacity-20' 
-                              : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                            !settings.registrationEnabled
+                              ? "border-red-500 bg-red-50 ring-2 ring-red-500 ring-opacity-20"
+                              : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
                           }`}
                         >
-                          <RadioGroupItem value="disabled" id="registration-disabled" className="border-red-500" />
+                          <RadioGroupItem
+                            value="disabled"
+                            id="registration-disabled"
+                            className="border-red-500"
+                          />
                           <div className="flex items-center space-x-2">
-                            <EyeOff className={`w-5 h-5 ${!settings.registrationEnabled ? 'text-red-600' : 'text-gray-400'}`} />
+                            <EyeOff
+                              className={`w-5 h-5 ${!settings.registrationEnabled ? "text-red-600" : "text-gray-400"}`}
+                            />
                             <div>
-                              <p className={`font-medium ${!settings.registrationEnabled ? 'text-red-900' : 'text-gray-700'}`}>
+                              <p
+                                className={`font-medium ${!settings.registrationEnabled ? "text-red-900" : "text-gray-700"}`}
+                              >
                                 Disabled
                               </p>
                               <p className="text-sm text-gray-500">
@@ -464,7 +561,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <Switch
                       id="autoApproval"
                       checked={settings.autoApproval}
-                      onCheckedChange={(checked) => handleSettingsChange('autoApproval', checked)}
+                      onCheckedChange={(checked) =>
+                        handleSettingsChange("autoApproval", checked)
+                      }
                     />
                   </div>
 
@@ -473,7 +572,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <Switch
                       id="emailNotif"
                       checked={settings.emailNotifications}
-                      onCheckedChange={(checked) => handleSettingsChange('emailNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        handleSettingsChange("emailNotifications", checked)
+                      }
                     />
                   </div>
 
@@ -482,7 +583,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <Switch
                       id="smsNotif"
                       checked={settings.smsNotifications}
-                      onCheckedChange={(checked) => handleSettingsChange('smsNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        handleSettingsChange("smsNotifications", checked)
+                      }
                     />
                   </div>
                 </div>
@@ -491,7 +594,7 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
               <Separator />
 
               <div className="flex justify-end">
-                <Button 
+                <Button
                   onClick={handleSaveSettings}
                   disabled={isSaveLoading}
                   className="bg-green-600 hover:bg-green-700"
@@ -533,7 +636,8 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <DialogHeader>
                       <DialogTitle>Add New Administrator</DialogTitle>
                       <DialogDescription>
-                        Create a new administrator account with specific permissions.
+                        Create a new administrator account with specific
+                        permissions.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
@@ -543,7 +647,11 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                       </div>
                       <div>
                         <Label htmlFor="adminEmail">Email Address</Label>
-                        <Input id="adminEmail" type="email" placeholder="admin@dsrfa.org" />
+                        <Input
+                          id="adminEmail"
+                          type="email"
+                          placeholder="admin@dsrfa.org"
+                        />
                       </div>
                       <div>
                         <Label htmlFor="adminRole">Role</Label>
@@ -553,15 +661,22 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="admin">Administrator</SelectItem>
-                            <SelectItem value="event-manager">Event Manager</SelectItem>
-                            <SelectItem value="member-coordinator">Member Coordinator</SelectItem>
+                            <SelectItem value="event-manager">
+                              Event Manager
+                            </SelectItem>
+                            <SelectItem value="member-coordinator">
+                              Member Coordinator
+                            </SelectItem>
                             <SelectItem value="moderator">Moderator</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsAddAdminOpen(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsAddAdminOpen(false)}
+                      >
                         Cancel
                       </Button>
                       <Button className="bg-green-600 hover:bg-green-700">
@@ -597,21 +712,33 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                         <Badge variant="outline">{admin.role}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge 
-                          variant={admin.status === 'Active' ? 'default' : 'secondary'}
-                          className={admin.status === 'Active' ? 'bg-green-600' : ''}
+                        <Badge
+                          variant={
+                            admin.status === "Active" ? "default" : "secondary"
+                          }
+                          className={
+                            admin.status === "Active" ? "bg-green-600" : ""
+                          }
                         >
                           {admin.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-sm">{admin.lastLogin}</TableCell>
+                      <TableCell className="text-sm">
+                        {admin.lastLogin}
+                      </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
-                          {admin.permissions.slice(0, 2).map((permission, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              {permission}
-                            </Badge>
-                          ))}
+                          {admin.permissions
+                            .slice(0, 2)
+                            .map((permission, index) => (
+                              <Badge
+                                key={index}
+                                variant="secondary"
+                                className="text-xs"
+                              >
+                                {permission}
+                              </Badge>
+                            ))}
                           {admin.permissions.length > 2 && (
                             <Badge variant="secondary" className="text-xs">
                               +{admin.permissions.length - 2}
@@ -624,7 +751,11 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                           <Button size="sm" variant="outline">
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline" className="text-red-600">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -650,15 +781,20 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
               <Alert>
                 <Shield className="h-4 w-4" />
                 <AlertDescription>
-                  Security settings help protect your system from unauthorized access and maintain data integrity.
+                  Security settings help protect your system from unauthorized
+                  access and maintain data integrity.
                 </AlertDescription>
               </Alert>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-base">Two-Factor Authentication</Label>
-                    <p className="text-sm text-gray-500">Require 2FA for all admin accounts</p>
+                    <Label className="text-base">
+                      Two-Factor Authentication
+                    </Label>
+                    <p className="text-sm text-gray-500">
+                      Require 2FA for all admin accounts
+                    </p>
                   </div>
                   <Switch />
                 </div>
@@ -666,7 +802,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="text-base">Password Complexity</Label>
-                    <p className="text-sm text-gray-500">Enforce strong password requirements</p>
+                    <p className="text-sm text-gray-500">
+                      Enforce strong password requirements
+                    </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
@@ -674,7 +812,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="text-base">Login Attempt Limit</Label>
-                    <p className="text-sm text-gray-500">Lock accounts after failed attempts</p>
+                    <p className="text-sm text-gray-500">
+                      Lock accounts after failed attempts
+                    </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
@@ -682,7 +822,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="flex items-center justify-between">
                   <div>
                     <Label className="text-base">Session Security</Label>
-                    <p className="text-sm text-gray-500">Force logout on browser close</p>
+                    <p className="text-sm text-gray-500">
+                      Force logout on browser close
+                    </p>
                   </div>
                   <Switch />
                 </div>
@@ -701,7 +843,10 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Force All Logout
                   </Button>
-                  <Button variant="outline" className="justify-start text-red-600">
+                  <Button
+                    variant="outline"
+                    className="justify-start text-red-600"
+                  >
                     <AlertCircle className="w-4 h-4 mr-2" />
                     Security Scan
                   </Button>
@@ -731,7 +876,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <p className="font-medium">Welcome Email</p>
-                      <p className="text-sm text-gray-500">Sent when new members register</p>
+                      <p className="text-sm text-gray-500">
+                        Sent when new members register
+                      </p>
                     </div>
                     <Button variant="outline" size="sm">
                       <Edit className="w-4 h-4 mr-2" />
@@ -741,7 +888,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <p className="font-medium">Event Reminder</p>
-                      <p className="text-sm text-gray-500">Sent before event dates</p>
+                      <p className="text-sm text-gray-500">
+                        Sent before event dates
+                      </p>
                     </div>
                     <Button variant="outline" size="sm">
                       <Edit className="w-4 h-4 mr-2" />
@@ -751,7 +900,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <p className="font-medium">Membership Renewal</p>
-                      <p className="text-sm text-gray-500">Sent when membership expires</p>
+                      <p className="text-sm text-gray-500">
+                        Sent when membership expires
+                      </p>
                     </div>
                     <Button variant="outline" size="sm">
                       <Edit className="w-4 h-4 mr-2" />
@@ -814,8 +965,8 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                       <Download className="w-4 h-4 mr-2" />
                       Export Financial Reports
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full justify-start"
                       onClick={handleBackupDownload}
                     >
@@ -828,24 +979,24 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
                 <div className="space-y-4">
                   <h4 className="font-medium">Import Data</h4>
                   <div className="space-y-3">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full justify-start"
                       onClick={handleDataImport}
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Import Members
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full justify-start"
                       onClick={handleDataImport}
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Import Events
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full justify-start"
                       onClick={handleDataImport}
                     >
@@ -865,8 +1016,9 @@ export function AdminManagementPage({ user, onNavigate }: AdminManagementPagePro
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Important:</strong> Always create a backup before importing data or making bulk changes. 
-                  Data operations cannot be undone.
+                  <strong>Important:</strong> Always create a backup before
+                  importing data or making bulk changes. Data operations cannot
+                  be undone.
                 </AlertDescription>
               </Alert>
             </CardContent>

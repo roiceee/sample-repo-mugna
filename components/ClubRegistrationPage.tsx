@@ -1,37 +1,58 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Textarea } from './ui/textarea';
-import { Progress } from './ui/progress';
-import { Alert, AlertDescription } from './ui/alert';
-import { Badge } from './ui/badge';
-import { Upload, CheckCircle, ArrowLeft, ArrowRight, Building, Info } from 'lucide-react';
-import { NavigationPage } from '../App';
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Textarea } from "./ui/textarea";
+import { Progress } from "./ui/progress";
+import { Alert, AlertDescription } from "./ui/alert";
+import { Badge } from "./ui/badge";
+import {
+  Upload,
+  CheckCircle,
+  ArrowLeft,
+  ArrowRight,
+  Building,
+  Info,
+} from "lucide-react";
+import { NavigationPage } from "../src/App";
 
 interface ClubRegistrationPageProps {
   onNavigate: (page: NavigationPage) => void;
 }
 
-export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) {
+export function ClubRegistrationPage({
+  onNavigate,
+}: ClubRegistrationPageProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: Club Details
-    clubName: '',
-    clubCategory: '',
-    foundedYear: '',
-    address: '',
+    clubName: "",
+    clubCategory: "",
+    foundedYear: "",
+    address: "",
     clubLogo: null as File | null,
-    playerCount: '',
-    
+    playerCount: "",
+
     // Step 2: Owner Details
-    ownerFirstName: '',
-    ownerLastName: '',
-    ownerEmail: '',
-    ownerPhone: '',
-    ownerAddress: '',
+    ownerFirstName: "",
+    ownerLastName: "",
+    ownerEmail: "",
+    ownerPhone: "",
+    ownerAddress: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -42,18 +63,16 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
   const progress = (currentStep / totalSteps) * 100;
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
-
-
   const handleFileUpload = (field: string, file: File | null) => {
-    setFormData(prev => ({ ...prev, [field]: file }));
+    setFormData((prev) => ({ ...prev, [field]: file }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
   };
 
@@ -62,17 +81,24 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
 
     switch (step) {
       case 1:
-        if (!formData.clubName) newErrors.clubName = 'Club name is required';
-        if (!formData.clubCategory) newErrors.clubCategory = 'Club category is required';
-        if (!formData.foundedYear) newErrors.foundedYear = 'Founded year is required';
-        if (!formData.playerCount) newErrors.playerCount = 'Player count is required';
+        if (!formData.clubName) newErrors.clubName = "Club name is required";
+        if (!formData.clubCategory)
+          newErrors.clubCategory = "Club category is required";
+        if (!formData.foundedYear)
+          newErrors.foundedYear = "Founded year is required";
+        if (!formData.playerCount)
+          newErrors.playerCount = "Player count is required";
         break;
       case 2:
-        if (!formData.ownerFirstName) newErrors.ownerFirstName = 'First name is required';
-        if (!formData.ownerLastName) newErrors.ownerLastName = 'Last name is required';
-        if (!formData.ownerEmail) newErrors.ownerEmail = 'Email is required';
-        if (!formData.ownerPhone) newErrors.ownerPhone = 'Phone number is required';
-        if (!formData.ownerAddress) newErrors.ownerAddress = 'Address is required';
+        if (!formData.ownerFirstName)
+          newErrors.ownerFirstName = "First name is required";
+        if (!formData.ownerLastName)
+          newErrors.ownerLastName = "Last name is required";
+        if (!formData.ownerEmail) newErrors.ownerEmail = "Email is required";
+        if (!formData.ownerPhone)
+          newErrors.ownerPhone = "Phone number is required";
+        if (!formData.ownerAddress)
+          newErrors.ownerAddress = "Address is required";
         break;
     }
 
@@ -82,21 +108,21 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
 
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+      setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
     }
   };
 
   const handlePrev = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async () => {
     if (validateStep(currentStep)) {
       setIsSubmitting(true);
-      
+
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       setRegistrationComplete(true);
       setIsSubmitting(false);
     }
@@ -109,31 +135,39 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
           <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold mb-4 text-green-600">Club Registration Submitted!</h1>
+          <h1 className="text-3xl font-bold mb-4 text-green-600">
+            Club Registration Submitted!
+          </h1>
           <p className="text-gray-600 mb-6">
-            Your club registration for <strong>{formData.clubName}</strong> has been submitted successfully 
-            and is now pending approval from DSRFA administrators.
+            Your club registration for <strong>{formData.clubName}</strong> has
+            been submitted successfully and is now pending approval from DSRFA
+            administrators.
           </p>
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <h3 className="font-medium mb-2">What happens next?</h3>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Your application will be reviewed by DSRFA administrators</li>
-              <li>• You will receive an email notification once your club is approved</li>
+              <li>
+                • Your application will be reviewed by DSRFA administrators
+              </li>
+              <li>
+                • You will receive an email notification once your club is
+                approved
+              </li>
               <li>• Approval typically takes 3-5 business days</li>
-              <li>• You'll be able to access club management features once approved</li>
+              <li>
+                • You'll be able to access club management features once
+                approved
+              </li>
             </ul>
           </div>
           <div className="flex gap-4 justify-center">
             <Button
-              onClick={() => onNavigate('landing')}
+              onClick={() => onNavigate("landing")}
               className="bg-logo-green hover:bg-green-600 text-white"
             >
               Back to Home
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => onNavigate('login')}
-            >
+            <Button variant="outline" onClick={() => onNavigate("login")}>
               Login to Account
             </Button>
           </div>
@@ -141,8 +175,6 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
       </div>
     );
   }
-
-
 
   const renderStep = () => {
     switch (currentStep) {
@@ -154,27 +186,38 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
               <Input
                 id="clubName"
                 value={formData.clubName}
-                onChange={(e) => handleInputChange('clubName', e.target.value)}
+                onChange={(e) => handleInputChange("clubName", e.target.value)}
                 placeholder="Enter your club's full name"
               />
-              {errors.clubName && <p className="text-sm text-red-600">{errors.clubName}</p>}
+              {errors.clubName && (
+                <p className="text-sm text-red-600">{errors.clubName}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="clubCategory">Club Category</Label>
-              <Select value={formData.clubCategory} onValueChange={(value) => handleInputChange('clubCategory', value)}>
+              <Select
+                value={formData.clubCategory}
+                onValueChange={(value) =>
+                  handleInputChange("clubCategory", value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select club category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Amateur">Amateur</SelectItem>
-                  <SelectItem value="Semi-Professional">Semi-Professional</SelectItem>
+                  <SelectItem value="Semi-Professional">
+                    Semi-Professional
+                  </SelectItem>
                   <SelectItem value="Professional">Professional</SelectItem>
                   <SelectItem value="Youth Academy">Youth Academy</SelectItem>
                   <SelectItem value="Community Club">Community Club</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.clubCategory && <p className="text-sm text-red-600">{errors.clubCategory}</p>}
+              {errors.clubCategory && (
+                <p className="text-sm text-red-600">{errors.clubCategory}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -183,12 +226,16 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                 id="foundedYear"
                 type="number"
                 value={formData.foundedYear}
-                onChange={(e) => handleInputChange('foundedYear', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("foundedYear", e.target.value)
+                }
                 placeholder="YYYY"
                 min="1900"
                 max={new Date().getFullYear()}
               />
-              {errors.foundedYear && <p className="text-sm text-red-600">{errors.foundedYear}</p>}
+              {errors.foundedYear && (
+                <p className="text-sm text-red-600">{errors.foundedYear}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -196,7 +243,7 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
               <Textarea
                 id="address"
                 value={formData.address}
-                onChange={(e) => handleInputChange('address', e.target.value)}
+                onChange={(e) => handleInputChange("address", e.target.value)}
                 placeholder="Enter your club's address (optional)"
                 rows={3}
               />
@@ -208,7 +255,9 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleFileUpload('clubLogo', e.target.files?.[0] || null)}
+                  onChange={(e) =>
+                    handleFileUpload("clubLogo", e.target.files?.[0] || null)
+                  }
                   className="hidden"
                   id="clubLogo"
                 />
@@ -221,7 +270,9 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                   ) : (
                     <div className="space-y-2">
                       <Upload className="w-8 h-8 text-gray-400 mx-auto" />
-                      <p className="text-sm text-gray-600">Click to upload club logo (optional)</p>
+                      <p className="text-sm text-gray-600">
+                        Click to upload club logo (optional)
+                      </p>
                     </div>
                   )}
                 </label>
@@ -234,11 +285,15 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                 id="playerCount"
                 type="number"
                 value={formData.playerCount}
-                onChange={(e) => handleInputChange('playerCount', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("playerCount", e.target.value)
+                }
                 placeholder="Number of registered players"
                 min="1"
               />
-              {errors.playerCount && <p className="text-sm text-red-600">{errors.playerCount}</p>}
+              {errors.playerCount && (
+                <p className="text-sm text-red-600">{errors.playerCount}</p>
+              )}
             </div>
           </div>
         );
@@ -249,7 +304,8 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Please provide the contact information for the club owner/manager who will be responsible for this club.
+                Please provide the contact information for the club
+                owner/manager who will be responsible for this club.
               </AlertDescription>
             </Alert>
 
@@ -259,20 +315,30 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                 <Input
                   id="ownerFirstName"
                   value={formData.ownerFirstName}
-                  onChange={(e) => handleInputChange('ownerFirstName', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("ownerFirstName", e.target.value)
+                  }
                   placeholder="Owner's first name"
                 />
-                {errors.ownerFirstName && <p className="text-sm text-red-600">{errors.ownerFirstName}</p>}
+                {errors.ownerFirstName && (
+                  <p className="text-sm text-red-600">
+                    {errors.ownerFirstName}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="ownerLastName">Last Name</Label>
                 <Input
                   id="ownerLastName"
                   value={formData.ownerLastName}
-                  onChange={(e) => handleInputChange('ownerLastName', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("ownerLastName", e.target.value)
+                  }
                   placeholder="Owner's last name"
                 />
-                {errors.ownerLastName && <p className="text-sm text-red-600">{errors.ownerLastName}</p>}
+                {errors.ownerLastName && (
+                  <p className="text-sm text-red-600">{errors.ownerLastName}</p>
+                )}
               </div>
             </div>
 
@@ -282,10 +348,14 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                 id="ownerEmail"
                 type="email"
                 value={formData.ownerEmail}
-                onChange={(e) => handleInputChange('ownerEmail', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("ownerEmail", e.target.value)
+                }
                 placeholder="owner@email.com"
               />
-              {errors.ownerEmail && <p className="text-sm text-red-600">{errors.ownerEmail}</p>}
+              {errors.ownerEmail && (
+                <p className="text-sm text-red-600">{errors.ownerEmail}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -293,10 +363,14 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
               <Input
                 id="ownerPhone"
                 value={formData.ownerPhone}
-                onChange={(e) => handleInputChange('ownerPhone', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("ownerPhone", e.target.value)
+                }
                 placeholder="+63 XXX-XXX-XXXX"
               />
-              {errors.ownerPhone && <p className="text-sm text-red-600">{errors.ownerPhone}</p>}
+              {errors.ownerPhone && (
+                <p className="text-sm text-red-600">{errors.ownerPhone}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -304,11 +378,15 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
               <Textarea
                 id="ownerAddress"
                 value={formData.ownerAddress}
-                onChange={(e) => handleInputChange('ownerAddress', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("ownerAddress", e.target.value)
+                }
                 placeholder="Complete address"
                 rows={3}
               />
-              {errors.ownerAddress && <p className="text-sm text-red-600">{errors.ownerAddress}</p>}
+              {errors.ownerAddress && (
+                <p className="text-sm text-red-600">{errors.ownerAddress}</p>
+              )}
             </div>
           </div>
         );
@@ -318,10 +396,7 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
     }
   };
 
-  const stepTitles = [
-    'Club Details',
-    'Owner Details'
-  ];
+  const stepTitles = ["Club Details", "Owner Details"];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -344,8 +419,14 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
               {Array.from({ length: totalSteps }, (_, i) => (
                 <Badge
                   key={i}
-                  variant={i + 1 === currentStep ? 'default' : i + 1 < currentStep ? 'secondary' : 'outline'}
-                  className={i + 1 === currentStep ? 'bg-green-600' : ''}
+                  variant={
+                    i + 1 === currentStep
+                      ? "default"
+                      : i + 1 < currentStep
+                        ? "secondary"
+                        : "outline"
+                  }
+                  className={i + 1 === currentStep ? "bg-green-600" : ""}
                 >
                   {i + 1}
                 </Badge>
@@ -385,7 +466,7 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
                       Submitting...
                     </>
                   ) : (
-                    'Submit for Approval'
+                    "Submit for Approval"
                   )}
                 </Button>
               )}
@@ -395,11 +476,11 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <button
               type="button"
               className="text-green-600 hover:text-green-700 font-medium"
-              onClick={() => onNavigate('login')}
+              onClick={() => onNavigate("login")}
             >
               Sign in here
             </button>
@@ -407,7 +488,7 @@ export function ClubRegistrationPage({ onNavigate }: ClubRegistrationPageProps) 
           <button
             type="button"
             className="text-sm text-gray-600 hover:text-gray-800 mt-2"
-            onClick={() => onNavigate('landing')}
+            onClick={() => onNavigate("landing")}
           >
             ← Back to Home
           </button>

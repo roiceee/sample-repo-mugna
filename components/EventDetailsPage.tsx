@@ -1,13 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './ui/breadcrumb';
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
-import { 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "./ui/dialog";
+import {
   ArrowLeft,
   Calendar,
   MapPin,
@@ -33,15 +53,25 @@ import {
   AlertCircle,
   Edit3,
   Plus,
-  Save
-} from 'lucide-react';
-import { NavigationPage, User as AppUser, hasAdminPrivileges } from '../App';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+  Save,
+} from "lucide-react";
+import {
+  NavigationPage,
+  User as AppUser,
+  hasAdminPrivileges,
+} from "../src/App";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface EventDetailsPageProps {
   user: AppUser | null;
   eventId: string | null;
-  onNavigate: (page: NavigationPage, memberId?: string, sponsorId?: string, tab?: string, eventId?: string) => void;
+  onNavigate: (
+    page: NavigationPage,
+    memberId?: string,
+    sponsorId?: string,
+    tab?: string,
+    eventId?: string
+  ) => void;
 }
 
 interface Match {
@@ -50,7 +80,7 @@ interface Match {
   awayTeam: string;
   homeScore: number;
   awayScore: number;
-  status: 'Live' | 'Upcoming' | 'Completed' | 'Postponed';
+  status: "Live" | "Upcoming" | "Completed" | "Postponed";
   startTime: string;
   venue: string;
   minute?: number;
@@ -60,15 +90,15 @@ interface Match {
 interface MatchEvent {
   id: string;
   minute: number;
-  type: 'goal' | 'yellow_card' | 'red_card' | 'substitution' | 'penalty';
+  type: "goal" | "yellow_card" | "red_card" | "substitution" | "penalty";
   player: string;
-  team: 'home' | 'away';
+  team: "home" | "away";
   description: string;
 }
 
 interface MediaItem {
   id: string;
-  type: 'photo' | 'video';
+  type: "photo" | "video";
   url: string;
   thumbnail: string;
   title: string;
@@ -88,11 +118,17 @@ interface Event {
   venue: string;
   description: string;
   image: string;
-  category: 'Tournament' | 'Training' | 'Workshop' | 'Match' | 'Certification' | 'Seminar';
+  category:
+    | "Tournament"
+    | "Training"
+    | "Workshop"
+    | "Match"
+    | "Certification"
+    | "Seminar";
   registrationFee: number;
   maxParticipants: number;
   currentParticipants: number;
-  status: 'Open' | 'Full' | 'Closed' | 'Live' | 'Completed';
+  status: "Open" | "Full" | "Closed" | "Live" | "Completed";
   organizer: string;
   contact: string;
   matches?: Match[];
@@ -100,192 +136,271 @@ interface Event {
   registered?: boolean;
 }
 
-export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPageProps) {
+export function EventDetailsPage({
+  user,
+  eventId,
+  onNavigate,
+}: EventDetailsPageProps) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
-  const [liveUpdateInterval, setLiveUpdateInterval] = useState<NodeJS.Timeout | null>(null);
+  const [liveUpdateInterval, setLiveUpdateInterval] =
+    useState<NodeJS.Timeout | null>(null);
   const [isScoreDialogOpen, setIsScoreDialogOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [scoreForm, setScoreForm] = useState({
     homeScore: 0,
     awayScore: 0,
-    status: 'Upcoming' as Match['status'],
-    minute: 0
+    status: "Upcoming" as Match["status"],
+    minute: 0,
   });
   const [matches, setMatches] = useState<Match[]>([]);
 
   // Mock event data - this would typically come from an API
   const eventsData: Record<string, Event> = {
-    '1': {
-      id: '1',
-      title: 'DSRFA Regional Championship 2025',
-      date: '2025-07-15',
-      time: '08:00 AM',
-      location: 'Davao City',
-      venue: 'Davao City Sports Complex',
-      description: 'Annual regional championship featuring teams from across Southern Mindanao. Open to all registered clubs.',
-      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=400&fit=crop',
-      category: 'Tournament',
+    "1": {
+      id: "1",
+      title: "DSRFA Regional Championship 2025",
+      date: "2025-07-15",
+      time: "08:00 AM",
+      location: "Davao City",
+      venue: "Davao City Sports Complex",
+      description:
+        "Annual regional championship featuring teams from across Southern Mindanao. Open to all registered clubs.",
+      image:
+        "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=400&fit=crop",
+      category: "Tournament",
       registrationFee: 2500,
       maxParticipants: 200,
       currentParticipants: 156,
-      status: 'Live',
-      organizer: 'DSRFA Tournament Committee',
-      contact: 'tournaments@dsrfa.org',
+      status: "Live",
+      organizer: "DSRFA Tournament Committee",
+      contact: "tournaments@dsrfa.org",
       registered: false,
       matches: [
         {
-          id: 'm1',
-          homeTeam: 'Davao Eagles FC',
-          awayTeam: 'Tagum Warriors',
+          id: "m1",
+          homeTeam: "Davao Eagles FC",
+          awayTeam: "Tagum Warriors",
           homeScore: 2,
           awayScore: 1,
-          status: 'Live',
-          startTime: '14:00',
-          venue: 'Field A',
+          status: "Live",
+          startTime: "14:00",
+          venue: "Field A",
           minute: 67,
           events: [
-            { id: 'e1', minute: 15, type: 'goal', player: 'Juan Santos', team: 'home', description: 'Header from corner kick' },
-            { id: 'e2', minute: 23, type: 'yellow_card', player: 'Roberto Cruz', team: 'away', description: 'Rough tackle' },
-            { id: 'e3', minute: 45, type: 'goal', player: 'Miguel Torres', team: 'away', description: 'Free kick goal' },
-            { id: 'e4', minute: 58, type: 'goal', player: 'Carlos Mendez', team: 'home', description: 'Counter attack finish' }
-          ]
+            {
+              id: "e1",
+              minute: 15,
+              type: "goal",
+              player: "Juan Santos",
+              team: "home",
+              description: "Header from corner kick",
+            },
+            {
+              id: "e2",
+              minute: 23,
+              type: "yellow_card",
+              player: "Roberto Cruz",
+              team: "away",
+              description: "Rough tackle",
+            },
+            {
+              id: "e3",
+              minute: 45,
+              type: "goal",
+              player: "Miguel Torres",
+              team: "away",
+              description: "Free kick goal",
+            },
+            {
+              id: "e4",
+              minute: 58,
+              type: "goal",
+              player: "Carlos Mendez",
+              team: "home",
+              description: "Counter attack finish",
+            },
+          ],
         },
         {
-          id: 'm2',
-          homeTeam: 'GenSan United',
-          awayTeam: 'Butuan City FC',
+          id: "m2",
+          homeTeam: "GenSan United",
+          awayTeam: "Butuan City FC",
           homeScore: 0,
           awayScore: 0,
-          status: 'Upcoming',
-          startTime: '16:00',
-          venue: 'Field B',
-          events: []
+          status: "Upcoming",
+          startTime: "16:00",
+          venue: "Field B",
+          events: [],
         },
         {
-          id: 'm3',
-          homeTeam: 'Cagayan de Oro FC',
-          awayTeam: 'Surigao Stallions',
+          id: "m3",
+          homeTeam: "Cagayan de Oro FC",
+          awayTeam: "Surigao Stallions",
           homeScore: 3,
           awayScore: 2,
-          status: 'Completed',
-          startTime: '10:00',
-          venue: 'Field A',
+          status: "Completed",
+          startTime: "10:00",
+          venue: "Field A",
           events: [
-            { id: 'e5', minute: 12, type: 'goal', player: 'Mark Lopez', team: 'home', description: 'Penalty kick' },
-            { id: 'e6', minute: 28, type: 'goal', player: 'James Rivera', team: 'away', description: 'Long range shot' },
-            { id: 'e7', minute: 34, type: 'goal', player: 'Alex Garcia', team: 'home', description: 'Close range finish' },
-            { id: 'e8', minute: 67, type: 'goal', player: 'Jose Fernandez', team: 'away', description: 'Header' },
-            { id: 'e9', minute: 89, type: 'goal', player: 'David Reyes', team: 'home', description: 'Last minute winner' }
-          ]
-        }
+            {
+              id: "e5",
+              minute: 12,
+              type: "goal",
+              player: "Mark Lopez",
+              team: "home",
+              description: "Penalty kick",
+            },
+            {
+              id: "e6",
+              minute: 28,
+              type: "goal",
+              player: "James Rivera",
+              team: "away",
+              description: "Long range shot",
+            },
+            {
+              id: "e7",
+              minute: 34,
+              type: "goal",
+              player: "Alex Garcia",
+              team: "home",
+              description: "Close range finish",
+            },
+            {
+              id: "e8",
+              minute: 67,
+              type: "goal",
+              player: "Jose Fernandez",
+              team: "away",
+              description: "Header",
+            },
+            {
+              id: "e9",
+              minute: 89,
+              type: "goal",
+              player: "David Reyes",
+              team: "home",
+              description: "Last minute winner",
+            },
+          ],
+        },
       ],
       media: [
         {
-          id: 'media1',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800&h=600&fit=crop',
-          thumbnail: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=300&h=200&fit=crop',
-          title: 'Tournament Opening Ceremony',
-          uploadedBy: 'DSRFA Admin',
-          uploadDate: '2025-07-15',
+          id: "media1",
+          type: "photo",
+          url: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800&h=600&fit=crop",
+          thumbnail:
+            "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=300&h=200&fit=crop",
+          title: "Tournament Opening Ceremony",
+          uploadedBy: "DSRFA Admin",
+          uploadDate: "2025-07-15",
           likes: 24,
           comments: 8,
-          description: 'Grand opening ceremony with all participating teams'
+          description: "Grand opening ceremony with all participating teams",
         },
         {
-          id: 'media2',
-          type: 'video',
-          url: 'https://sample-videos.com/zip/10/mp4/360/BigBuckBunny_360_10s_1MB.mp4',
-          thumbnail: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300&h=200&fit=crop',
-          title: 'Best Goals Compilation',
-          uploadedBy: 'DSRFA Media Team',
-          uploadDate: '2025-07-15',
+          id: "media2",
+          type: "video",
+          url: "https://sample-videos.com/zip/10/mp4/360/BigBuckBunny_360_10s_1MB.mp4",
+          thumbnail:
+            "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300&h=200&fit=crop",
+          title: "Best Goals Compilation",
+          uploadedBy: "DSRFA Media Team",
+          uploadDate: "2025-07-15",
           likes: 45,
           comments: 12,
-          description: 'Top 5 goals from today\'s matches'
+          description: "Top 5 goals from today's matches",
         },
         {
-          id: 'media3',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop',
-          thumbnail: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop',
-          title: 'Young Players in Action',
-          uploadedBy: 'Tournament Photographer',
-          uploadDate: '2025-07-15',
+          id: "media3",
+          type: "photo",
+          url: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop",
+          thumbnail:
+            "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop",
+          title: "Young Players in Action",
+          uploadedBy: "Tournament Photographer",
+          uploadDate: "2025-07-15",
           likes: 18,
           comments: 5,
-          description: 'Youth teams showcasing their skills'
+          description: "Youth teams showcasing their skills",
         },
         {
-          id: 'media4',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&h=600&fit=crop',
-          thumbnail: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=300&h=200&fit=crop',
-          title: 'Champions Celebration',
-          uploadedBy: 'Event Coordinator',
-          uploadDate: '2025-07-15',
+          id: "media4",
+          type: "photo",
+          url: "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&h=600&fit=crop",
+          thumbnail:
+            "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=300&h=200&fit=crop",
+          title: "Champions Celebration",
+          uploadedBy: "Event Coordinator",
+          uploadDate: "2025-07-15",
           likes: 67,
           comments: 23,
-          description: 'Victory celebration after the final match'
+          description: "Victory celebration after the final match",
         },
         {
-          id: 'media5',
-          type: 'video',
-          url: 'https://sample-videos.com/zip/10/mp4/360/BigBuckBunny_360_10s_1MB.mp4',
-          thumbnail: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=300&h=200&fit=crop',
-          title: 'Match Highlights',
-          uploadedBy: 'Sports Broadcaster',
-          uploadDate: '2025-07-15',
+          id: "media5",
+          type: "video",
+          url: "https://sample-videos.com/zip/10/mp4/360/BigBuckBunny_360_10s_1MB.mp4",
+          thumbnail:
+            "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=300&h=200&fit=crop",
+          title: "Match Highlights",
+          uploadedBy: "Sports Broadcaster",
+          uploadDate: "2025-07-15",
           likes: 89,
           comments: 34,
-          description: 'Extended highlights from the semi-final matches'
+          description: "Extended highlights from the semi-final matches",
         },
         {
-          id: 'media6',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop',
-          thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop',
-          title: 'Coach Strategy Session',
-          uploadedBy: 'Team Reporter',
-          uploadDate: '2025-07-15',
+          id: "media6",
+          type: "photo",
+          url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
+          thumbnail:
+            "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
+          title: "Coach Strategy Session",
+          uploadedBy: "Team Reporter",
+          uploadDate: "2025-07-15",
           likes: 12,
           comments: 3,
-          description: 'Coaches discussing tactics during halftime'
-        }
-      ]
+          description: "Coaches discussing tactics during halftime",
+        },
+      ],
     },
-    '2': {
-      id: '2',
-      title: 'Youth Development Workshop',
-      date: '2025-06-25',
-      time: '02:00 PM',
-      location: 'DSRFA Training Facility',
-      venue: 'Training Ground A',
-      description: 'Skills development workshop for young players aged 12-18. Focus on ball control, passing, and tactical awareness.',
-      image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=400&fit=crop',
-      category: 'Workshop',
+    "2": {
+      id: "2",
+      title: "Youth Development Workshop",
+      date: "2025-06-25",
+      time: "02:00 PM",
+      location: "DSRFA Training Facility",
+      venue: "Training Ground A",
+      description:
+        "Skills development workshop for young players aged 12-18. Focus on ball control, passing, and tactical awareness.",
+      image:
+        "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=400&fit=crop",
+      category: "Workshop",
       registrationFee: 500,
       maxParticipants: 50,
       currentParticipants: 32,
-      status: 'Open',
-      organizer: 'DSRFA Youth Development',
-      contact: 'youth@dsrfa.org',
+      status: "Open",
+      organizer: "DSRFA Youth Development",
+      contact: "youth@dsrfa.org",
       registered: false,
       media: [
         {
-          id: 'media7',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop',
-          thumbnail: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop',
-          title: 'Skills Training Session',
-          uploadedBy: 'Workshop Instructor',
-          uploadDate: '2025-06-25',
+          id: "media7",
+          type: "photo",
+          url: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop",
+          thumbnail:
+            "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop",
+          title: "Skills Training Session",
+          uploadedBy: "Workshop Instructor",
+          uploadDate: "2025-06-25",
           likes: 15,
           comments: 4,
-          description: 'Young players practicing ball control drills'
-        }
-      ]
-    }
+          description: "Young players practicing ball control drills",
+        },
+      ],
+    },
   };
 
   const event = eventId ? eventsData[eventId] : null;
@@ -301,10 +416,10 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if (event?.status === 'Live') {
+    if (event?.status === "Live") {
       interval = setInterval(() => {
         // In a real app, this would fetch updated scores from an API
-        console.log('Updating live scores...');
+        console.log("Updating live scores...");
       }, 30000); // Update every 30 seconds
 
       setLiveUpdateInterval(interval);
@@ -338,9 +453,16 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
       <div className="px-4 py-8">
         <div className="text-center py-12">
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Event not found</h3>
-          <p className="text-gray-600 mb-4">The requested event could not be found.</p>
-          <Button onClick={() => onNavigate('events')} className="bg-logo-green hover:bg-green-600 text-white rounded-lg">
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Event not found
+          </h3>
+          <p className="text-gray-600 mb-4">
+            The requested event could not be found.
+          </p>
+          <Button
+            onClick={() => onNavigate("events")}
+            className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
+          >
             Back to Events
           </Button>
         </div>
@@ -350,11 +472,26 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      'Live': { className: 'bg-red-600 text-white animate-pulse', icon: <Zap className="w-3 h-3 mr-1" /> },
-      'Open': { className: 'bg-green-600 text-white', icon: <UserCheck className="w-3 h-3 mr-1" /> },
-      'Completed': { className: 'bg-gray-600 text-white', icon: <Trophy className="w-3 h-3 mr-1" /> },
-      'Full': { className: 'bg-orange-600 text-white', icon: <Users className="w-3 h-3 mr-1" /> },
-      'Closed': { className: 'bg-gray-400 text-white', icon: <Clock className="w-3 h-3 mr-1" /> }
+      Live: {
+        className: "bg-red-600 text-white animate-pulse",
+        icon: <Zap className="w-3 h-3 mr-1" />,
+      },
+      Open: {
+        className: "bg-green-600 text-white",
+        icon: <UserCheck className="w-3 h-3 mr-1" />,
+      },
+      Completed: {
+        className: "bg-gray-600 text-white",
+        icon: <Trophy className="w-3 h-3 mr-1" />,
+      },
+      Full: {
+        className: "bg-orange-600 text-white",
+        icon: <Users className="w-3 h-3 mr-1" />,
+      },
+      Closed: {
+        className: "bg-gray-400 text-white",
+        icon: <Clock className="w-3 h-3 mr-1" />,
+      },
     };
 
     const variant = variants[status as keyof typeof variants] || variants.Open;
@@ -368,13 +505,26 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
 
   const getMatchStatusBadge = (status: string) => {
     const variants = {
-      'Live': { className: 'bg-red-600 text-white animate-pulse', icon: <Zap className="w-3 h-3 mr-1" /> },
-      'Upcoming': { className: 'bg-blue-600 text-white', icon: <Clock className="w-3 h-3 mr-1" /> },
-      'Completed': { className: 'bg-gray-600 text-white', icon: <Trophy className="w-3 h-3 mr-1" /> },
-      'Postponed': { className: 'bg-yellow-600 text-white', icon: <Timer className="w-3 h-3 mr-1" /> }
+      Live: {
+        className: "bg-red-600 text-white animate-pulse",
+        icon: <Zap className="w-3 h-3 mr-1" />,
+      },
+      Upcoming: {
+        className: "bg-blue-600 text-white",
+        icon: <Clock className="w-3 h-3 mr-1" />,
+      },
+      Completed: {
+        className: "bg-gray-600 text-white",
+        icon: <Trophy className="w-3 h-3 mr-1" />,
+      },
+      Postponed: {
+        className: "bg-yellow-600 text-white",
+        icon: <Timer className="w-3 h-3 mr-1" />,
+      },
     };
 
-    const variant = variants[status as keyof typeof variants] || variants.Upcoming;
+    const variant =
+      variants[status as keyof typeof variants] || variants.Upcoming;
     return (
       <Badge className={`rounded-lg ${variant.className}`}>
         {variant.icon}
@@ -385,26 +535,32 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'goal': return '⚽';
-      case 'yellow_card': return '🟨';
-      case 'red_card': return '🟥';
-      case 'substitution': return '🔄';
-      case 'penalty': return '🥅';
-      default: return '⚽';
+      case "goal":
+        return "⚽";
+      case "yellow_card":
+        return "🟨";
+      case "red_card":
+        return "🟥";
+      case "substitution":
+        return "🔄";
+      case "penalty":
+        return "🥅";
+      default:
+        return "⚽";
     }
   };
 
   const handleRegister = () => {
-    onNavigate('event-registration', undefined, undefined, undefined, eventId!);
+    onNavigate("event-registration", undefined, undefined, undefined, eventId!);
   };
 
   const handleManage = () => {
-    onNavigate('event-management', undefined, undefined, undefined, eventId!);
+    onNavigate("event-management", undefined, undefined, undefined, eventId!);
   };
 
   const handleMediaUpload = () => {
     // Mock media upload
-    alert('Media upload functionality would be implemented here');
+    alert("Media upload functionality would be implemented here");
   };
 
   const handleEditScore = (match: Match) => {
@@ -413,7 +569,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
       homeScore: match.homeScore,
       awayScore: match.awayScore,
       status: match.status,
-      minute: match.minute || 0
+      minute: match.minute || 0,
     });
     setIsScoreDialogOpen(true);
   };
@@ -422,14 +578,14 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
     if (!selectedMatch) return;
 
     // Update the specific match in the matches array
-    const updatedMatches = matches.map(match => 
-      match.id === selectedMatch.id 
+    const updatedMatches = matches.map((match) =>
+      match.id === selectedMatch.id
         ? {
             ...match,
             homeScore: scoreForm.homeScore,
             awayScore: scoreForm.awayScore,
             status: scoreForm.status,
-            minute: scoreForm.status === 'Live' ? scoreForm.minute : undefined
+            minute: scoreForm.status === "Live" ? scoreForm.minute : undefined,
           }
         : match
     );
@@ -437,30 +593,30 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
     setMatches(updatedMatches);
     setIsScoreDialogOpen(false);
     setSelectedMatch(null);
-    
+
     // In a real app, this would save to a backend
-    alert('Score updated successfully!');
+    alert("Score updated successfully!");
   };
 
   const handleAddMatch = () => {
     const newMatch: Match = {
       id: `m${matches.length + 1}`,
-      homeTeam: 'Team A',
-      awayTeam: 'Team B',
+      homeTeam: "Team A",
+      awayTeam: "Team B",
       homeScore: 0,
       awayScore: 0,
-      status: 'Upcoming',
-      startTime: '00:00',
-      venue: 'Field A',
-      events: []
+      status: "Upcoming",
+      startTime: "00:00",
+      venue: "Field A",
+      events: [],
     };
 
     setSelectedMatch(newMatch);
     setScoreForm({
       homeScore: 0,
       awayScore: 0,
-      status: 'Upcoming',
-      minute: 0
+      status: "Upcoming",
+      minute: 0,
     });
     setIsScoreDialogOpen(true);
   };
@@ -473,14 +629,14 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
       homeScore: scoreForm.homeScore,
       awayScore: scoreForm.awayScore,
       status: scoreForm.status,
-      minute: scoreForm.status === 'Live' ? scoreForm.minute : undefined
+      minute: scoreForm.status === "Live" ? scoreForm.minute : undefined,
     };
 
     setMatches([...matches, newMatch]);
     setIsScoreDialogOpen(false);
     setSelectedMatch(null);
-    
-    alert('New match added successfully!');
+
+    alert("New match added successfully!");
   };
 
   return (
@@ -490,8 +646,8 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink 
-                onClick={() => onNavigate('events')}
+              <BreadcrumbLink
+                onClick={() => onNavigate("events")}
                 className="cursor-pointer hover:text-logo-green"
               >
                 Events & Tournament
@@ -503,7 +659,9 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="font-medium">{event.title}</BreadcrumbPage>
+              <BreadcrumbPage className="font-medium">
+                {event.title}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -512,9 +670,9 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div className="flex items-center space-x-4">
-          <Button 
-            variant="outline" 
-            onClick={() => onNavigate('events')}
+          <Button
+            variant="outline"
+            onClick={() => onNavigate("events")}
             className="rounded-lg"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -526,9 +684,11 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
               {getStatusBadge(event.status)}
             </div>
             <p className="text-gray-600">
-              {event.status === 'Live' ? 'Event is currently live with ongoing matches' : 
-               event.status === 'Completed' ? 'Event has been completed' :
-               'View event details, live scores, and media'}
+              {event.status === "Live"
+                ? "Event is currently live with ongoing matches"
+                : event.status === "Completed"
+                  ? "Event has been completed"
+                  : "View event details, live scores, and media"}
             </p>
           </div>
         </div>
@@ -536,7 +696,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
         <div className="flex space-x-3">
           {hasAdminPrivileges(user) && (
             <>
-              <Button 
+              <Button
                 variant="outline"
                 onClick={handleMediaUpload}
                 className="rounded-lg"
@@ -544,7 +704,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <Upload className="w-4 h-4 mr-2" />
                 Upload Media
               </Button>
-              <Button 
+              <Button
                 onClick={handleManage}
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
               >
@@ -553,16 +713,18 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
               </Button>
             </>
           )}
-          
-          {!hasAdminPrivileges(user) && event.status === 'Open' && !event.registered && (
-            <Button 
-              onClick={handleRegister}
-              className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
-            >
-              <UserCheck className="w-4 h-4 mr-2" />
-              Register Now
-            </Button>
-          )}
+
+          {!hasAdminPrivileges(user) &&
+            event.status === "Open" &&
+            !event.registered && (
+              <Button
+                onClick={handleRegister}
+                className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
+              >
+                <UserCheck className="w-4 h-4 mr-2" />
+                Register Now
+              </Button>
+            )}
         </div>
       </div>
 
@@ -593,12 +755,14 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   <div className="space-y-3">
                     <div className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                      <span>{new Date(event.date).toLocaleDateString('en-US', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}</span>
+                      <span>
+                        {new Date(event.date).toLocaleDateString("en-US", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
                     </div>
                     <div className="flex items-center text-sm">
                       <Clock className="w-4 h-4 mr-2 text-gray-400" />
@@ -606,10 +770,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                     </div>
                     <div className="flex items-center text-sm">
                       <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-                      <span>{event.venue}, {event.location}</span>
+                      <span>
+                        {event.venue}, {event.location}
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <div className="flex items-center text-sm">
                       <DollarSign className="w-4 h-4 mr-2 text-gray-400" />
@@ -617,7 +783,10 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                     </div>
                     <div className="flex items-center text-sm">
                       <Users className="w-4 h-4 mr-2 text-gray-400" />
-                      <span>{event.currentParticipants}/{event.maxParticipants} participants</span>
+                      <span>
+                        {event.currentParticipants}/{event.maxParticipants}{" "}
+                        participants
+                      </span>
                     </div>
                     <div className="flex items-center text-sm">
                       <Building className="w-4 h-4 mr-2 text-gray-400" />
@@ -625,10 +794,14 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="pt-4 border-t">
-                  <h4 className="font-medium text-gray-900 mb-2">Description</h4>
-                  <p className="text-gray-600 leading-relaxed">{event.description}</p>
+                  <h4 className="font-medium text-gray-900 mb-2">
+                    Description
+                  </h4>
+                  <p className="text-gray-600 leading-relaxed">
+                    {event.description}
+                  </p>
                 </div>
               </div>
             </div>
@@ -645,7 +818,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="w-5 h-5" />
                   <span>Live Scores & Matches</span>
-                  {matches.some(m => m.status === 'Live') && (
+                  {matches.some((m) => m.status === "Live") && (
                     <Badge className="bg-red-600 text-white animate-pulse rounded-lg">
                       <Zap className="w-3 h-3 mr-1" />
                       LIVE
@@ -653,7 +826,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   )}
                 </CardTitle>
                 {hasAdminPrivileges(user) && (
-                  <Button 
+                  <Button
                     onClick={handleAddMatch}
                     className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
                   >
@@ -669,77 +842,102 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   <Trophy className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                   <p>No matches scheduled yet.</p>
                   {hasAdminPrivileges(user) && (
-                    <p className="text-sm mt-1">Click &quot;Add Match&quot; to create the first match.</p>
+                    <p className="text-sm mt-1">
+                      Click &quot;Add Match&quot; to create the first match.
+                    </p>
                   )}
                 </div>
               ) : (
                 <div className="space-y-4">
                   {matches.map((match) => (
-                  <Card key={match.id} className="rounded-lg border">
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                          {getMatchStatusBadge(match.status)}
-                          <span className="text-sm text-gray-600">{match.venue} • {match.startTime}</span>
-                          {match.status === 'Live' && match.minute && (
-                            <Badge variant="outline" className="rounded-lg">
-                              {match.minute}'
-                            </Badge>
+                    <Card key={match.id} className="rounded-lg border">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-3">
+                            {getMatchStatusBadge(match.status)}
+                            <span className="text-sm text-gray-600">
+                              {match.venue} • {match.startTime}
+                            </span>
+                            {match.status === "Live" && match.minute && (
+                              <Badge variant="outline" className="rounded-lg">
+                                {match.minute}'
+                              </Badge>
+                            )}
+                          </div>
+                          {hasAdminPrivileges(user) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEditScore(match)}
+                              className="rounded-lg"
+                            >
+                              <Edit3 className="w-3 h-3 mr-1" />
+                              Edit Score
+                            </Button>
                           )}
                         </div>
-                        {hasAdminPrivileges(user) && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEditScore(match)}
-                            className="rounded-lg"
-                          >
-                            <Edit3 className="w-3 h-3 mr-1" />
-                            Edit Score
-                          </Button>
+
+                        {/* Match Score */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center space-x-4 flex-1">
+                            <div className="text-right flex-1">
+                              <h4 className="font-medium">{match.homeTeam}</h4>
+                            </div>
+                            <div className="flex items-center space-x-3 text-center">
+                              <span className="text-2xl font-bold">
+                                {match.homeScore}
+                              </span>
+                              <span className="text-gray-400">-</span>
+                              <span className="text-2xl font-bold">
+                                {match.awayScore}
+                              </span>
+                            </div>
+                            <div className="text-left flex-1">
+                              <h4 className="font-medium">{match.awayTeam}</h4>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Match Events */}
+                        {match.events.length > 0 && (
+                          <div className="border-t pt-4">
+                            <h5 className="font-medium text-gray-900 mb-3">
+                              Match Events
+                            </h5>
+                            <div className="space-y-2 max-h-32 overflow-y-auto">
+                              {match.events
+                                .slice()
+                                .reverse()
+                                .map((event) => (
+                                  <div
+                                    key={event.id}
+                                    className="flex items-center justify-between text-sm"
+                                  >
+                                    <div className="flex items-center space-x-2">
+                                      <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                                        {event.minute}'
+                                      </span>
+                                      <span>{getEventIcon(event.type)}</span>
+                                      <span>{event.player}</span>
+                                      <span className="text-gray-500">
+                                        ({event.description})
+                                      </span>
+                                    </div>
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs rounded"
+                                    >
+                                      {event.team === "home"
+                                        ? match.homeTeam
+                                        : match.awayTeam}
+                                    </Badge>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
                         )}
-                      </div>
-
-                      {/* Match Score */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-4 flex-1">
-                          <div className="text-right flex-1">
-                            <h4 className="font-medium">{match.homeTeam}</h4>
-                          </div>
-                          <div className="flex items-center space-x-3 text-center">
-                            <span className="text-2xl font-bold">{match.homeScore}</span>
-                            <span className="text-gray-400">-</span>
-                            <span className="text-2xl font-bold">{match.awayScore}</span>
-                          </div>
-                          <div className="text-left flex-1">
-                            <h4 className="font-medium">{match.awayTeam}</h4>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Match Events */}
-                      {match.events.length > 0 && (
-                        <div className="border-t pt-4">
-                          <h5 className="font-medium text-gray-900 mb-3">Match Events</h5>
-                          <div className="space-y-2 max-h-32 overflow-y-auto">
-                            {match.events.slice().reverse().map((event) => (
-                              <div key={event.id} className="flex items-center justify-between text-sm">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-xs bg-gray-100 px-2 py-1 rounded">{event.minute}'</span>
-                                  <span>{getEventIcon(event.type)}</span>
-                                  <span>{event.player}</span>
-                                  <span className="text-gray-500">({event.description})</span>
-                                </div>
-                                <Badge variant="outline" className="text-xs rounded">
-                                  {event.team === 'home' ? match.homeTeam : match.awayTeam}
-                                </Badge>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               )}
@@ -771,7 +969,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                               alt={item.title}
                               className="w-full h-full object-cover"
                             />
-                            {item.type === 'video' && (
+                            {item.type === "video" && (
                               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                                 <div className="bg-white/90 rounded-full p-3">
                                   <Play className="w-6 h-6 text-gray-800" />
@@ -780,16 +978,26 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                             )}
                             <div className="absolute top-2 right-2">
                               <Badge className="bg-white/90 text-gray-800 rounded-lg">
-                                {item.type === 'video' ? <Video className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
+                                {item.type === "video" ? (
+                                  <Video className="w-3 h-3" />
+                                ) : (
+                                  <ImageIcon className="w-3 h-3" />
+                                )}
                               </Badge>
                             </div>
                           </div>
-                          
+
                           <div className="p-4">
-                            <h4 className="font-medium text-gray-900 mb-1 line-clamp-2">{item.title}</h4>
-                            <p className="text-sm text-gray-600 mb-2">by {item.uploadedBy}</p>
+                            <h4 className="font-medium text-gray-900 mb-1 line-clamp-2">
+                              {item.title}
+                            </h4>
+                            <p className="text-sm text-gray-600 mb-2">
+                              by {item.uploadedBy}
+                            </p>
                             <div className="flex items-center justify-between text-xs text-gray-500">
-                              <span>{new Date(item.uploadDate).toLocaleDateString()}</span>
+                              <span>
+                                {new Date(item.uploadDate).toLocaleDateString()}
+                              </span>
                               <div className="flex items-center space-x-3">
                                 <span className="flex items-center">
                                   <Heart className="w-3 h-3 mr-1" />
@@ -806,10 +1014,10 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                       </DialogTrigger>
                       <DialogContent className="max-w-4xl max-h-[90vh] p-0">
                         <div className="relative">
-                          {item.type === 'video' ? (
-                            <video 
-                              src={item.url} 
-                              controls 
+                          {item.type === "video" ? (
+                            <video
+                              src={item.url}
+                              controls
                               className="w-full h-auto max-h-[70vh] rounded-lg"
                               autoPlay
                             >
@@ -822,14 +1030,21 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                               className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
                             />
                           )}
-                          
+
                           <div className="p-6">
-                            <h3 className="text-lg font-medium mb-2">{item.title}</h3>
+                            <h3 className="text-lg font-medium mb-2">
+                              {item.title}
+                            </h3>
                             {item.description && (
-                              <p className="text-gray-600 mb-4">{item.description}</p>
+                              <p className="text-gray-600 mb-4">
+                                {item.description}
+                              </p>
                             )}
                             <div className="flex items-center justify-between text-sm text-gray-500">
-                              <span>Uploaded by {item.uploadedBy} on {new Date(item.uploadDate).toLocaleDateString()}</span>
+                              <span>
+                                Uploaded by {item.uploadedBy} on{" "}
+                                {new Date(item.uploadDate).toLocaleDateString()}
+                              </span>
                               <div className="flex items-center space-x-4">
                                 <span className="flex items-center">
                                   <Heart className="w-4 h-4 mr-1" />
@@ -839,7 +1054,11 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                                   <MessageCircle className="w-4 h-4 mr-1" />
                                   {item.comments} comments
                                 </span>
-                                <Button size="sm" variant="outline" className="rounded-lg">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="rounded-lg"
+                                >
                                   <Download className="w-3 h-3 mr-1" />
                                   Download
                                 </Button>
@@ -863,12 +1082,17 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
           <Card className="rounded-lg">
             <CardContent className="text-center py-12">
               <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No media available</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No media available
+              </h3>
               <p className="text-gray-600 mb-4">
                 Media content will be available during and after the event.
               </p>
               {hasAdminPrivileges(user) && (
-                <Button onClick={handleMediaUpload} className="bg-logo-green hover:bg-green-600 text-white rounded-lg">
+                <Button
+                  onClick={handleMediaUpload}
+                  className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
+                >
                   <Upload className="w-4 h-4 mr-2" />
                   Upload First Media
                 </Button>
@@ -883,10 +1107,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {selectedMatch && matches.includes(selectedMatch) ? 'Edit Match Score' : 'Add New Match'}
+              {selectedMatch && matches.includes(selectedMatch)
+                ? "Edit Match Score"
+                : "Add New Match"}
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             {/* Team Names */}
             <div className="grid grid-cols-2 gap-4">
@@ -894,8 +1120,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <Label htmlFor="homeTeam">Home Team</Label>
                 <Input
                   id="homeTeam"
-                  value={selectedMatch?.homeTeam || ''}
-                  onChange={(e) => setSelectedMatch(prev => prev ? {...prev, homeTeam: e.target.value} : null)}
+                  value={selectedMatch?.homeTeam || ""}
+                  onChange={(e) =>
+                    setSelectedMatch((prev) =>
+                      prev ? { ...prev, homeTeam: e.target.value } : null
+                    )
+                  }
                   className="rounded-lg"
                   placeholder="Home Team Name"
                 />
@@ -904,8 +1134,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <Label htmlFor="awayTeam">Away Team</Label>
                 <Input
                   id="awayTeam"
-                  value={selectedMatch?.awayTeam || ''}
-                  onChange={(e) => setSelectedMatch(prev => prev ? {...prev, awayTeam: e.target.value} : null)}
+                  value={selectedMatch?.awayTeam || ""}
+                  onChange={(e) =>
+                    setSelectedMatch((prev) =>
+                      prev ? { ...prev, awayTeam: e.target.value } : null
+                    )
+                  }
                   className="rounded-lg"
                   placeholder="Away Team Name"
                 />
@@ -921,7 +1155,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   type="number"
                   min="0"
                   value={scoreForm.homeScore}
-                  onChange={(e) => setScoreForm(prev => ({...prev, homeScore: parseInt(e.target.value) || 0}))}
+                  onChange={(e) =>
+                    setScoreForm((prev) => ({
+                      ...prev,
+                      homeScore: parseInt(e.target.value) || 0,
+                    }))
+                  }
                   className="rounded-lg"
                 />
               </div>
@@ -932,7 +1171,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   type="number"
                   min="0"
                   value={scoreForm.awayScore}
-                  onChange={(e) => setScoreForm(prev => ({...prev, awayScore: parseInt(e.target.value) || 0}))}
+                  onChange={(e) =>
+                    setScoreForm((prev) => ({
+                      ...prev,
+                      awayScore: parseInt(e.target.value) || 0,
+                    }))
+                  }
                   className="rounded-lg"
                 />
               </div>
@@ -944,8 +1188,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <Label htmlFor="venue">Venue</Label>
                 <Input
                   id="venue"
-                  value={selectedMatch?.venue || ''}
-                  onChange={(e) => setSelectedMatch(prev => prev ? {...prev, venue: e.target.value} : null)}
+                  value={selectedMatch?.venue || ""}
+                  onChange={(e) =>
+                    setSelectedMatch((prev) =>
+                      prev ? { ...prev, venue: e.target.value } : null
+                    )
+                  }
                   className="rounded-lg"
                   placeholder="Field A"
                 />
@@ -954,8 +1202,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                 <Label htmlFor="startTime">Start Time</Label>
                 <Input
                   id="startTime"
-                  value={selectedMatch?.startTime || ''}
-                  onChange={(e) => setSelectedMatch(prev => prev ? {...prev, startTime: e.target.value} : null)}
+                  value={selectedMatch?.startTime || ""}
+                  onChange={(e) =>
+                    setSelectedMatch((prev) =>
+                      prev ? { ...prev, startTime: e.target.value } : null
+                    )
+                  }
                   className="rounded-lg"
                   placeholder="14:00"
                 />
@@ -966,9 +1218,14 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Match Status</Label>
-                <Select 
-                  value={scoreForm.status} 
-                  onValueChange={(value) => setScoreForm(prev => ({...prev, status: value as Match['status']}))}
+                <Select
+                  value={scoreForm.status}
+                  onValueChange={(value) =>
+                    setScoreForm((prev) => ({
+                      ...prev,
+                      status: value as Match["status"],
+                    }))
+                  }
                 >
                   <SelectTrigger className="rounded-lg">
                     <SelectValue />
@@ -981,7 +1238,7 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                   </SelectContent>
                 </Select>
               </div>
-              {scoreForm.status === 'Live' && (
+              {scoreForm.status === "Live" && (
                 <div>
                   <Label htmlFor="minute">Current Minute</Label>
                   <Input
@@ -990,7 +1247,12 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
                     min="0"
                     max="120"
                     value={scoreForm.minute}
-                    onChange={(e) => setScoreForm(prev => ({...prev, minute: parseInt(e.target.value) || 0}))}
+                    onChange={(e) =>
+                      setScoreForm((prev) => ({
+                        ...prev,
+                        minute: parseInt(e.target.value) || 0,
+                      }))
+                    }
                     className="rounded-lg"
                     placeholder="90"
                   />
@@ -1000,20 +1262,26 @@ export function EventDetailsPage({ user, eventId, onNavigate }: EventDetailsPage
           </div>
 
           <DialogFooter>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setIsScoreDialogOpen(false)}
               className="rounded-lg"
             >
               Cancel
             </Button>
-            <Button 
-              onClick={selectedMatch && matches.includes(selectedMatch) ? handleSaveScore : handleSaveNewMatch}
+            <Button
+              onClick={
+                selectedMatch && matches.includes(selectedMatch)
+                  ? handleSaveScore
+                  : handleSaveNewMatch
+              }
               className="bg-logo-green hover:bg-green-600 text-white rounded-lg"
               disabled={!selectedMatch?.homeTeam || !selectedMatch?.awayTeam}
             >
               <Save className="w-4 h-4 mr-2" />
-              {selectedMatch && matches.includes(selectedMatch) ? 'Update Score' : 'Add Match'}
+              {selectedMatch && matches.includes(selectedMatch)
+                ? "Update Score"
+                : "Add Match"}
             </Button>
           </DialogFooter>
         </DialogContent>

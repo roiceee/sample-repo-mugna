@@ -1,3 +1,4 @@
+@tailwindcss;
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -8,110 +9,110 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  
+
   /* Primary Green (swapped from accent) */
-  --primary: #38A169;
+  --primary: #38a169;
   --primary-foreground: #ffffff;
-  
+
   /* Secondary/Accent Red (swapped from primary) */
-  --secondary: #F7FAFC;
-  --secondary-foreground: #2D3748;
-  --accent: #E53E3E;
+  --secondary: #f7fafc;
+  --secondary-foreground: #2d3748;
+  --accent: #e53e3e;
   --accent-foreground: #ffffff;
-  
-  --muted: #F7FAFC;
+
+  --muted: #f7fafc;
   --muted-foreground: #718096;
-  
+
   /* Complementary colors with green as primary */
-  --success: #38A169;
+  --success: #38a169;
   --success-foreground: #ffffff;
-  --warning: #D69E2E;
+  --warning: #d69e2e;
   --warning-foreground: #ffffff;
-  --destructive: #E53E3E;
+  --destructive: #e53e3e;
   --destructive-foreground: #ffffff;
-  
+
   /* Earth tones from eagle */
-  --earth-brown: #8B4513;
-  --earth-light: #D2B48C;
-  
+  --earth-brown: #8b4513;
+  --earth-light: #d2b48c;
+
   --border: rgba(0, 0, 0, 0.1);
   --input: transparent;
-  --input-background: #F7FAFC;
-  --switch-background: #CBD5E0;
+  --input-background: #f7fafc;
+  --switch-background: #cbd5e0;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #38A169;
-  
+  --ring: #38a169;
+
   /* Chart colors with green as primary */
-  --chart-1: #38A169;
-  --chart-2: #E53E3E;
-  --chart-3: #8B4513;
-  --chart-4: #D69E2E;
-  --chart-5: #4299E1;
-  
+  --chart-1: #38a169;
+  --chart-2: #e53e3e;
+  --chart-3: #8b4513;
+  --chart-4: #d69e2e;
+  --chart-5: #4299e1;
+
   /* Increased radius for accessibility */
   --radius: 0.375rem; /* 6px */
-  
+
   /* Height multipliers for better accessibility */
   --input-height-multiplier: 1.15; /* 15% increase */
   --button-height-multiplier: 1.12; /* 12% increase */
-  
-  --sidebar: #F7FAFC;
-  --sidebar-foreground: #2D3748;
-  --sidebar-primary: #38A169;
+
+  --sidebar: #f7fafc;
+  --sidebar-foreground: #2d3748;
+  --sidebar-primary: #38a169;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #EDF2F7;
-  --sidebar-accent-foreground: #2D3748;
-  --sidebar-border: #E2E8F0;
-  --sidebar-ring: #38A169;
+  --sidebar-accent: #edf2f7;
+  --sidebar-accent-foreground: #2d3748;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #38a169;
 }
 
 .dark {
-  --background: #1A202C;
-  --foreground: #F7FAFC;
-  --card: #2D3748;
-  --card-foreground: #F7FAFC;
-  --popover: #2D3748;
-  --popover-foreground: #F7FAFC;
-  
+  --background: #1a202c;
+  --foreground: #f7fafc;
+  --card: #2d3748;
+  --card-foreground: #f7fafc;
+  --popover: #2d3748;
+  --popover-foreground: #f7fafc;
+
   /* Adjusted primary (green) for dark mode */
-  --primary: #68D391;
-  --primary-foreground: #1A202C;
-  
-  --secondary: #4A5568;
-  --secondary-foreground: #F7FAFC;
-  --muted: #4A5568;
-  --muted-foreground: #A0AEC0;
-  
+  --primary: #68d391;
+  --primary-foreground: #1a202c;
+
+  --secondary: #4a5568;
+  --secondary-foreground: #f7fafc;
+  --muted: #4a5568;
+  --muted-foreground: #a0aec0;
+
   /* Adjusted accent (red) for dark mode */
-  --accent: #FC8181;
-  --accent-foreground: #1A202C;
-  
-  --success: #68D391;
-  --success-foreground: #1A202C;
-  --warning: #F6E05E;
-  --warning-foreground: #1A202C;
-  --destructive: #FC8181;
-  --destructive-foreground: #1A202C;
-  
-  --border: #4A5568;
-  --input: #4A5568;
-  --ring: #68D391;
-  
-  --chart-1: #68D391;
-  --chart-2: #FC8181;
-  --chart-3: #D2B48C;
-  --chart-4: #F6E05E;
-  --chart-5: #63B3ED;
-  
-  --sidebar: #2D3748;
-  --sidebar-foreground: #F7FAFC;
-  --sidebar-primary: #68D391;
-  --sidebar-primary-foreground: #1A202C;
-  --sidebar-accent: #4A5568;
-  --sidebar-accent-foreground: #F7FAFC;
-  --sidebar-border: #4A5568;
-  --sidebar-ring: #68D391;
+  --accent: #fc8181;
+  --accent-foreground: #1a202c;
+
+  --success: #68d391;
+  --success-foreground: #1a202c;
+  --warning: #f6e05e;
+  --warning-foreground: #1a202c;
+  --destructive: #fc8181;
+  --destructive-foreground: #1a202c;
+
+  --border: #4a5568;
+  --input: #4a5568;
+  --ring: #68d391;
+
+  --chart-1: #68d391;
+  --chart-2: #fc8181;
+  --chart-3: #d2b48c;
+  --chart-4: #f6e05e;
+  --chart-5: #63b3ed;
+
+  --sidebar: #2d3748;
+  --sidebar-foreground: #f7fafc;
+  --sidebar-primary: #68d391;
+  --sidebar-primary-foreground: #1a202c;
+  --sidebar-accent: #4a5568;
+  --sidebar-accent-foreground: #f7fafc;
+  --sidebar-border: #4a5568;
+  --sidebar-ring: #68d391;
 }
 
 @theme inline {
@@ -147,13 +148,13 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  
+
   /* Updated radius values for better accessibility */
   --radius-sm: calc(var(--radius) - 2px); /* 4px */
   --radius-md: var(--radius); /* 6px */
   --radius-lg: calc(var(--radius) + 2px); /* 8px */
   --radius-xl: calc(var(--radius) + 6px); /* 12px */
-  
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -203,27 +204,35 @@
   input[type="number"],
   textarea,
   select {
-    min-height: calc(2.5rem * var(--input-height-multiplier)); /* ~46px from 40px */
+    min-height: calc(
+      2.5rem * var(--input-height-multiplier)
+    ); /* ~46px from 40px */
     padding-top: calc(0.75rem * var(--input-height-multiplier));
     padding-bottom: calc(0.75rem * var(--input-height-multiplier));
   }
 
   button {
-    min-height: calc(2.5rem * var(--button-height-multiplier)); /* ~45px from 40px */
+    min-height: calc(
+      2.5rem * var(--button-height-multiplier)
+    ); /* ~45px from 40px */
     padding-top: calc(0.625rem * var(--button-height-multiplier));
     padding-bottom: calc(0.625rem * var(--button-height-multiplier));
   }
 
   /* Special handling for small buttons */
   button[data-size="sm"] {
-    min-height: calc(2rem * var(--button-height-multiplier)); /* ~36px from 32px */
+    min-height: calc(
+      2rem * var(--button-height-multiplier)
+    ); /* ~36px from 32px */
     padding-top: calc(0.5rem * var(--button-height-multiplier));
     padding-bottom: calc(0.5rem * var(--button-height-multiplier));
   }
 
   /* Special handling for large buttons */
   button[data-size="lg"] {
-    min-height: calc(3rem * var(--button-height-multiplier)); /* ~54px from 48px */
+    min-height: calc(
+      3rem * var(--button-height-multiplier)
+    ); /* ~54px from 48px */
     padding-top: calc(0.875rem * var(--button-height-multiplier));
     padding-bottom: calc(0.875rem * var(--button-height-multiplier));
   }
@@ -288,61 +297,61 @@
 @layer utilities {
   /* Green is now primary */
   .text-primary-green {
-    color: #38A169;
+    color: #38a169;
   }
-  
+
   .bg-primary-green {
-    background-color: #38A169;
+    background-color: #38a169;
   }
-  
+
   /* Red is now secondary/accent */
   .text-accent-red {
-    color: #E53E3E;
+    color: #e53e3e;
   }
-  
+
   .bg-accent-red {
-    background-color: #E53E3E;
+    background-color: #e53e3e;
   }
-  
+
   .text-earth-brown {
-    color: #8B4513;
+    color: #8b4513;
   }
-  
+
   .bg-earth-brown {
-    background-color: #8B4513;
+    background-color: #8b4513;
   }
-  
+
   .border-primary-green {
-    border-color: #38A169;
+    border-color: #38a169;
   }
-  
+
   .border-accent-red {
-    border-color: #E53E3E;
+    border-color: #e53e3e;
   }
 
   /* Backward compatibility with existing classes */
   .text-logo-green {
-    color: #38A169;
+    color: #38a169;
   }
-  
+
   .bg-logo-green {
-    background-color: #38A169;
+    background-color: #38a169;
   }
-  
+
   .text-logo-red {
-    color: #E53E3E;
+    color: #e53e3e;
   }
-  
+
   .bg-logo-red {
-    background-color: #E53E3E;
+    background-color: #e53e3e;
   }
-  
+
   .border-logo-green {
-    border-color: #38A169;
+    border-color: #38a169;
   }
-  
+
   .border-logo-red {
-    border-color: #E53E3E;
+    border-color: #e53e3e;
   }
 
   /* Additional height utility classes */

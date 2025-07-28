@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" viewBox="0 0 200 80" fill="none">
+  <rect width="80" height="80" rx="8" fill="#106A43"/>
+  <path d="M40 16C23.44 16 10 29.44 10 46C10 62.56 23.44 76 40 76C56.56 76 70 62.56 70 46C70 29.44 56.56 16 40 16ZM40 22C43.2 22 46 24.8 46 28C46 31.2 43.2 34 40 34C36.8 34 34 31.2 34 28C34 24.8 36.8 22 40 22ZM52 58H28V52H34V40H28V34H40V52H46V58H52Z" fill="white"/>
+  <text x="140" y="35" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#106A43">DSRFA</text>
+  <text x="140" y="60" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="12" fill="#106A43">Football Association</text>
+</svg>
