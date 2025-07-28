@@ -1,423 +1,80 @@
-@tailwindcss;
-@custom-variant dark (&:is(.dark *));
+/* Standard Tailwind CSS - Replace your current CSS with this */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom CSS variables */
 :root {
-  --font-size: 15.4px; /* Increased by 10% from 14px for elderly users accessibility */
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-
-  /* Primary Green (swapped from accent) */
-  --primary: #38a169;
-  --primary-foreground: #ffffff;
-
-  /* Secondary/Accent Red (swapped from primary) */
-  --secondary: #f7fafc;
-  --secondary-foreground: #2d3748;
-  --accent: #e53e3e;
-  --accent-foreground: #ffffff;
-
-  --muted: #f7fafc;
-  --muted-foreground: #718096;
-
-  /* Complementary colors with green as primary */
-  --success: #38a169;
-  --success-foreground: #ffffff;
-  --warning: #d69e2e;
-  --warning-foreground: #ffffff;
-  --destructive: #e53e3e;
-  --destructive-foreground: #ffffff;
-
-  /* Earth tones from eagle */
+  --font-size: 15.4px;
+  --primary-green: #38a169;
+  --accent-red: #e53e3e;
   --earth-brown: #8b4513;
   --earth-light: #d2b48c;
-
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f7fafc;
-  --switch-background: #cbd5e0;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: #38a169;
-
-  /* Chart colors with green as primary */
-  --chart-1: #38a169;
-  --chart-2: #e53e3e;
-  --chart-3: #8b4513;
-  --chart-4: #d69e2e;
-  --chart-5: #4299e1;
-
-  /* Increased radius for accessibility */
-  --radius: 0.375rem; /* 6px */
-
-  /* Height multipliers for better accessibility */
-  --input-height-multiplier: 1.15; /* 15% increase */
-  --button-height-multiplier: 1.12; /* 12% increase */
-
-  --sidebar: #f7fafc;
-  --sidebar-foreground: #2d3748;
-  --sidebar-primary: #38a169;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #edf2f7;
-  --sidebar-accent-foreground: #2d3748;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #38a169;
 }
 
 .dark {
-  --background: #1a202c;
-  --foreground: #f7fafc;
-  --card: #2d3748;
-  --card-foreground: #f7fafc;
-  --popover: #2d3748;
-  --popover-foreground: #f7fafc;
-
-  /* Adjusted primary (green) for dark mode */
-  --primary: #68d391;
-  --primary-foreground: #1a202c;
-
-  --secondary: #4a5568;
-  --secondary-foreground: #f7fafc;
-  --muted: #4a5568;
-  --muted-foreground: #a0aec0;
-
-  /* Adjusted accent (red) for dark mode */
-  --accent: #fc8181;
-  --accent-foreground: #1a202c;
-
-  --success: #68d391;
-  --success-foreground: #1a202c;
-  --warning: #f6e05e;
-  --warning-foreground: #1a202c;
-  --destructive: #fc8181;
-  --destructive-foreground: #1a202c;
-
-  --border: #4a5568;
-  --input: #4a5568;
-  --ring: #68d391;
-
-  --chart-1: #68d391;
-  --chart-2: #fc8181;
-  --chart-3: #d2b48c;
-  --chart-4: #f6e05e;
-  --chart-5: #63b3ed;
-
-  --sidebar: #2d3748;
-  --sidebar-foreground: #f7fafc;
-  --sidebar-primary: #68d391;
-  --sidebar-primary-foreground: #1a202c;
-  --sidebar-accent: #4a5568;
-  --sidebar-accent-foreground: #f7fafc;
-  --sidebar-border: #4a5568;
-  --sidebar-ring: #68d391;
+  --primary-green: #68d391;
+  --accent-red: #fc8181;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-earth-brown: var(--earth-brown);
-  --color-earth-light: var(--earth-light);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
-  /* Updated radius values for better accessibility */
-  --radius-sm: calc(var(--radius) - 2px); /* 4px */
-  --radius-md: var(--radius); /* 6px */
-  --radius-lg: calc(var(--radius) + 2px); /* 8px */
-  --radius-xl: calc(var(--radius) + 6px); /* 12px */
-
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  /* FORCE ALL CHECKBOXES TO BE PERFECT 20px SQUARES - NEVER RECTANGLES */
-  [role="checkbox"],
-  input[type="checkbox"],
-  button[data-slot="checkbox"],
-  [data-slot="checkbox"] {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    max-width: 20px !important;
-    max-height: 20px !important;
-    aspect-ratio: 1 / 1 !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* Enhanced input and button heights for accessibility */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="tel"],
-  input[type="url"],
-  input[type="search"],
-  input[type="date"],
-  input[type="datetime-local"],
-  input[type="month"],
-  input[type="week"],
-  input[type="time"],
-  input[type="number"],
-  textarea,
-  select {
-    min-height: calc(
-      2.5rem * var(--input-height-multiplier)
-    ); /* ~46px from 40px */
-    padding-top: calc(0.75rem * var(--input-height-multiplier));
-    padding-bottom: calc(0.75rem * var(--input-height-multiplier));
-  }
-
-  button {
-    min-height: calc(
-      2.5rem * var(--button-height-multiplier)
-    ); /* ~45px from 40px */
-    padding-top: calc(0.625rem * var(--button-height-multiplier));
-    padding-bottom: calc(0.625rem * var(--button-height-multiplier));
-  }
-
-  /* Special handling for small buttons */
-  button[data-size="sm"] {
-    min-height: calc(
-      2rem * var(--button-height-multiplier)
-    ); /* ~36px from 32px */
-    padding-top: calc(0.5rem * var(--button-height-multiplier));
-    padding-bottom: calc(0.5rem * var(--button-height-multiplier));
-  }
-
-  /* Special handling for large buttons */
-  button[data-size="lg"] {
-    min-height: calc(
-      3rem * var(--button-height-multiplier)
-    ); /* ~54px from 48px */
-    padding-top: calc(0.875rem * var(--button-height-multiplier));
-    padding-bottom: calc(0.875rem * var(--button-height-multiplier));
-  }
-}
-
-/**
- * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
- */
-@layer base {
-  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
-    h1 {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h2 {
-      font-size: var(--text-xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h3 {
-      font-size: var(--text-lg);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h4 {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    p {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
-    }
-
-    label {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    button {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    input {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
-    }
-  }
-}
-
-/* Custom utility classes for swapped logo colors */
+/* Custom utility classes */
 @layer utilities {
-  /* Green is now primary */
   .text-primary-green {
-    color: #38a169;
+    color: var(--primary-green);
   }
 
   .bg-primary-green {
-    background-color: #38a169;
+    background-color: var(--primary-green);
   }
 
-  /* Red is now secondary/accent */
   .text-accent-red {
-    color: #e53e3e;
+    color: var(--accent-red);
   }
 
   .bg-accent-red {
-    background-color: #e53e3e;
+    background-color: var(--accent-red);
   }
 
   .text-earth-brown {
-    color: #8b4513;
+    color: var(--earth-brown);
   }
 
   .bg-earth-brown {
-    background-color: #8b4513;
+    background-color: var(--earth-brown);
   }
 
-  .border-primary-green {
-    border-color: #38a169;
-  }
-
-  .border-accent-red {
-    border-color: #e53e3e;
-  }
-
-  /* Backward compatibility with existing classes */
-  .text-logo-green {
-    color: #38a169;
-  }
-
-  .bg-logo-green {
-    background-color: #38a169;
-  }
-
-  .text-logo-red {
-    color: #e53e3e;
-  }
-
-  .bg-logo-red {
-    background-color: #e53e3e;
-  }
-
-  .border-logo-green {
-    border-color: #38a169;
-  }
-
-  .border-logo-red {
-    border-color: #e53e3e;
-  }
-
-  /* Additional height utility classes */
-  .h-input-enhanced {
-    min-height: calc(2.5rem * var(--input-height-multiplier));
-  }
-
-  .h-button-enhanced {
-    min-height: calc(2.5rem * var(--button-height-multiplier));
-  }
-
-  .py-input-enhanced {
-    padding-top: calc(0.75rem * var(--input-height-multiplier));
-    padding-bottom: calc(0.75rem * var(--input-height-multiplier));
-  }
-
-  .py-button-enhanced {
-    padding-top: calc(0.625rem * var(--button-height-multiplier));
-    padding-bottom: calc(0.625rem * var(--button-height-multiplier));
-  }
-
-  /* Force all checkboxes to be perfect squares - 20px by 20px */
   .checkbox-forced-square {
     width: 20px !important;
     height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    max-width: 20px !important;
-    max-height: 20px !important;
     aspect-ratio: 1 / 1 !important;
-  }
-
-  /* Horizontal line utilities */
-  .hr-line {
-    width: 100%;
-    height: 1px;
-    background-color: var(--border);
-    border: none;
-  }
-
-  .hr-line-thin {
-    height: 1px;
-  }
-
-  .hr-line-medium {
-    height: 2px;
-  }
-
-  .hr-line-thick {
-    height: 4px;
-  }
-
-  .hr-line-primary {
-    background-color: var(--primary);
-  }
-
-  .hr-line-accent {
-    background-color: var(--accent);
-  }
-
-  .hr-line-muted {
-    background-color: var(--muted-foreground);
-    opacity: 0.2;
   }
 }
 
-html {
-  font-size: var(--font-size);
+/* Enhanced accessibility styles */
+@layer base {
+  html {
+    font-size: var(--font-size);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    min-height: 46px;
+    padding: 12px;
+  }
+
+  button {
+    min-height: 45px;
+    padding: 10px 16px;
+  }
+
+  [role="checkbox"],
+  input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    aspect-ratio: 1 / 1 !important;
+  }
 }
