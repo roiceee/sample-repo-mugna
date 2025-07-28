@@ -40,8 +40,6 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
       type: "Tournament",
       image:
         "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=200&fit=crop&crop=center",
-      image:
-        "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=200&fit=crop&crop=center",
     },
     {
       id: 2,
